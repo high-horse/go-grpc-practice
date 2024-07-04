@@ -5,3 +5,9 @@ codegen:
     --go-grpc_out=invoicer \
     --go-grpc_opt=paths=source_relative \
     invoicer.proto
+
+
+generate-grpc:
+    cd grpc && protoc --go-grpc_out=. --go_out=. *.proto
+
+
