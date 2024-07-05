@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option go_package = "./invoice";
+
+package invoice;
+
+
+service Invoice {
+    rpc GetInvoice (InvoiceRequest) returns (InvoiceResponse) {}
+    rpc CreateInvoice (CreateInvoiceRequest) returns (CreateInvoiceResponse) {}
+    // rpc UpdateInvoice (UpdateInvoiceRequest) returns (UpdateInvoiceResponse) {}
+    // rpc ListInvoices (ListInvoicesRequest) returns (ListInvoicesResponse) {}
+    // rpc PayInvoice (PayInvoiceRequest) returns (PayInvoiceResponse) {}
+}
+
+message InvoiceRequest {
+    string id = 1;
+}
+
+message InvoiceResponse {
+    string invMessage = 1;
+    string id = 2;
+    string payerId = 3;
+    string payerName = 4;
+    string payerEmail = 5;
+}
+
+message CreateInvoiceRequest {
+    string id = 1;
+    string payerId = 2;
+    string payerName = 3;
+    string payerEmail = 4;
+    string amount = 5;
+    string currency = 6;
+    string description = 7;
+    string metadata = 8;
+}
+
+message CreateInvoiceResponse {
+    string invMessage = 1;
+    string id = 2;
+    string payerId = 3;
+    string payerName = 4;
+    string payerEmail = 5;
+}
