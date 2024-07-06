@@ -8,7 +8,8 @@ package invoice;
 service Invoice {
     rpc GetInvoice (InvoiceRequest) returns (InvoiceResponse) {}
     rpc CreateInvoice (CreateInvoiceRequest) returns (CreateInvoiceResponse) {}
-    // rpc UpdateInvoice (UpdateInvoiceRequest) returns (UpdateInvoiceResponse) {}
+    rpc UpdateInvoice (UpdateInvoiceRequest) returns (UpdateInvoiceResponse) {}
+    rpc DeleteInvoice (DeleteInvoiceRequest) returns (DeleteInvoiceResponse) {}
     // rpc ListInvoices (ListInvoicesRequest) returns (ListInvoicesResponse) {}
     // rpc PayInvoice (PayInvoiceRequest) returns (PayInvoiceResponse) {}
 }
@@ -37,6 +38,38 @@ message CreateInvoiceRequest {
 }
 
 message CreateInvoiceResponse {
+    string invMessage = 1;
+    string id = 2;
+    string payerId = 3;
+    string payerName = 4;
+    string payerEmail = 5;
+}
+
+
+message UpdateInvoiceRequest {
+    string id = 1;
+    string payerId = 2;
+    string payerName = 3;
+    string payerEmail = 4;
+    string amount = 5;
+    string currency = 6;
+    string description = 7;
+    string metadata = 8;
+}
+
+message UpdateInvoiceResponse {
+    string invMessage = 1;
+    string id = 2;
+    string payerId = 3;
+    string payerName = 4;
+    string payerEmail = 5;
+}
+
+message DeleteInvoiceRequest {
+    string id = 1;
+}
+
+message DeleteInvoiceResponse {
     string invMessage = 1;
     string id = 2;
     string payerId = 3;

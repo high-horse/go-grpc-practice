@@ -21,6 +21,8 @@ const _ = grpc.SupportPackageIsVersion8
 const (
 	Invoice_GetInvoice_FullMethodName    = "/invoice.Invoice/GetInvoice"
 	Invoice_CreateInvoice_FullMethodName = "/invoice.Invoice/CreateInvoice"
+	Invoice_UpdateInvoice_FullMethodName = "/invoice.Invoice/UpdateInvoice"
+	Invoice_DeleteInvoice_FullMethodName = "/invoice.Invoice/DeleteInvoice"
 )
 
 // InvoiceClient is the client API for Invoice service.
@@ -29,6 +31,8 @@ const (
 type InvoiceClient interface {
 	GetInvoice(ctx context.Context, in *InvoiceRequest, opts ...grpc.CallOption) (*InvoiceResponse, error)
 	CreateInvoice(ctx context.Context, in *CreateInvoiceRequest, opts ...grpc.CallOption) (*CreateInvoiceResponse, error)
+	UpdateInvoice(ctx context.Context, in *UpdateInvoiceRequest, opts ...grpc.CallOption) (*UpdateInvoiceResponse, error)
+	DeleteInvoice(ctx context.Context, in *DeleteInvoiceRequest, opts ...grpc.CallOption) (*DeleteInvoiceResponse, error)
 }
 
 type invoiceClient struct {
@@ -59,12 +63,34 @@ func (c *invoiceClient) CreateInvoice(ctx context.Context, in *CreateInvoiceRequ
 	return out, nil
 }
 
+func (c *invoiceClient) UpdateInvoice(ctx context.Context, in *UpdateInvoiceRequest, opts ...grpc.CallOption) (*UpdateInvoiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateInvoiceResponse)
+	err := c.cc.Invoke(ctx, Invoice_UpdateInvoice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *invoiceClient) DeleteInvoice(ctx context.Context, in *DeleteInvoiceRequest, opts ...grpc.CallOption) (*DeleteInvoiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteInvoiceResponse)
+	err := c.cc.Invoke(ctx, Invoice_DeleteInvoice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InvoiceServer is the server API for Invoice service.
 // All implementations must embed UnimplementedInvoiceServer
 // for forward compatibility
 type InvoiceServer interface {
 	GetInvoice(context.Context, *InvoiceRequest) (*InvoiceResponse, error)
 	CreateInvoice(context.Context, *CreateInvoiceRequest) (*CreateInvoiceResponse, error)
+	UpdateInvoice(context.Context, *UpdateInvoiceRequest) (*UpdateInvoiceResponse, error)
+	DeleteInvoice(context.Context, *DeleteInvoiceRequest) (*DeleteInvoiceResponse, error)
 	mustEmbedUnimplementedInvoiceServer()
 }
 
@@ -77,6 +103,12 @@ func (UnimplementedInvoiceServer) GetInvoice(context.Context, *InvoiceRequest) (
 }
 func (UnimplementedInvoiceServer) CreateInvoice(context.Context, *CreateInvoiceRequest) (*CreateInvoiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInvoice not implemented")
+}
+func (UnimplementedInvoiceServer) UpdateInvoice(context.Context, *UpdateInvoiceRequest) (*UpdateInvoiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInvoice not implemented")
+}
+func (UnimplementedInvoiceServer) DeleteInvoice(context.Context, *DeleteInvoiceRequest) (*DeleteInvoiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteInvoice not implemented")
 }
 func (UnimplementedInvoiceServer) mustEmbedUnimplementedInvoiceServer() {}
 
@@ -127,6 +159,42 @@ func _Invoice_CreateInvoice_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Invoice_UpdateInvoice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInvoiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InvoiceServer).UpdateInvoice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Invoice_UpdateInvoice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InvoiceServer).UpdateInvoice(ctx, req.(*UpdateInvoiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Invoice_DeleteInvoice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteInvoiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InvoiceServer).DeleteInvoice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Invoice_DeleteInvoice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InvoiceServer).DeleteInvoice(ctx, req.(*DeleteInvoiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Invoice_ServiceDesc is the grpc.ServiceDesc for Invoice service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -141,6 +209,14 @@ var Invoice_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateInvoice",
 			Handler:    _Invoice_CreateInvoice_Handler,
+		},
+		{
+			MethodName: "UpdateInvoice",
+			Handler:    _Invoice_UpdateInvoice_Handler,
+		},
+		{
+			MethodName: "DeleteInvoice",
+			Handler:    _Invoice_DeleteInvoice_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

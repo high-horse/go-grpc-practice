@@ -42,13 +42,37 @@ func (s *Server) GetInvoice(ctx context.Context, req *proto.InvoiceRequest) (*pr
 }
 
 func (s *Server) CreateInvoice(ctx context.Context, req *proto.CreateInvoiceRequest) (*proto.CreateInvoiceResponse, error) {
-	log.Println("new request")
+	log.Println("new request \"CreateInvoice\"")
 	res := &proto.CreateInvoiceResponse{
 		InvMessage: "test",
 		Id:         req.Id,
 		PayerId:    req.PayerId,
 		PayerName:  req.PayerName,
 		PayerEmail: req.PayerEmail,
+	}
+	return res, nil
+}
+
+func (s * Server) UpdateInvoice(ctx context.Context, req *proto.UpdateInvoiceRequest) (*proto.UpdateInvoiceResponse, error) {
+	log.Println("new request \"UpdateInvoice\"")
+	res := &proto.UpdateInvoiceResponse{
+		InvMessage: "test",
+		Id:         req.Id,
+		PayerId:    req.PayerId,
+		PayerName:  req.PayerName,
+		PayerEmail: req.PayerEmail,
+	}
+	return res, nil
+}
+
+func (s *Server) DeleteInvoice(ctx context.Context, req *proto.DeleteInvoiceRequest) (*proto.DeleteInvoiceResponse, error) {
+	log.Println("new request \"DeleteInvoice\"")
+	res := &proto.DeleteInvoiceResponse{
+		InvMessage: "test",
+		Id:         req.Id,
+		PayerId:    "dummy PayerId" ,
+		PayerName:  "dummy PayerName" ,
+		PayerEmail: "dummy PayerEmail" ,
 	}
 	return res, nil
 }
