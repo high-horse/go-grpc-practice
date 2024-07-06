@@ -1,0 +1,62 @@
+{
+  "id":  "7bf20667-eac5-4cb2-8a3b-3c17ccb24e01",
+  "brand":  "Dell",
+  "name":  "Latitude",
+  "cpu":  {
+    "brand":  "Intel",
+    "name":  "Core i5-8265U",
+    "number_cores":  7,
+    "number_threads":  7,
+    "min_ghz":  2.8495776556196777,
+    "max_ghz":  3.2969610159132623
+  },
+  "ram":  {
+    "value":  "10",
+    "unit":  "GIGABYTE"
+  },
+  "gpus":  [
+    {
+      "brand":  "AMD",
+      "name":  "RX 580",
+      "min_ghz":  1.2204770398321503,
+      "max_ghz":  1.3725530757582989,
+      "memory":  {
+        "value":  "2",
+        "unit":  "GIGABYTE"
+      }
+    }
+  ],
+  "storages":  [
+    {
+      "driver":  "SSD",
+      "memory":  {
+        "value":  "438",
+        "unit":  "GIGABYTE"
+      }
+    },
+    {
+      "driver":  "HDD",
+      "memory":  {
+        "value":  "6",
+        "unit":  "TERABYTE"
+      }
+    }
+  ],
+  "screen":  {
+    "size_inch":  15.54603,
+    "resolution":  {
+      "width":  4061,
+      "height":  7219
+    },
+    "panel":  "OLED",
+    "multitouch":  true
+  },
+  "keyboard":  {
+    "layout":  "QWERTY",
+    "backlit":  true
+  },
+  "weight_kg":  1.4800473727074173,
+  "price_usd":  2297.6157283372477,
+  "release_year":  2021,
+  "updated_at":  "2024-07-06T18:45:08.943293048Z"
+}

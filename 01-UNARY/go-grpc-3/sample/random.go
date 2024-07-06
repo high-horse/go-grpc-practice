@@ -3,9 +3,14 @@ package sample
 import (
 	"grpc-3/pb"
 	"math/rand"
+	"time"
 
 	"github.com/google/uuid"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func randomBool() bool{
 	return rand.Intn(2) == 1 
