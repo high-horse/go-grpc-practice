@@ -31,7 +31,7 @@ func main() {
 }
 
 func (s *Server) GetInvoice(ctx context.Context, req *proto.InvoiceRequest) (*proto.InvoiceResponse, error) {
-	log.Println("new request")
+	log.Println("new request \"GetInvoice\"")
 	res := &proto.InvoiceResponse{
 		Id:         req.Id,
 		PayerId:    "test",
