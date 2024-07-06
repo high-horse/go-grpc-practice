@@ -18,3 +18,15 @@ func WriteProtobuffToBinaryFile(message proto.Message, filename string) error {
 	}
 	return nil
 }
+
+func ReadProtobuffFromBinaryFile(filename string, message proto.Message) error {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return fmt.Errorf("cannot read binary data from file: %w", err)
+	}
+	err = proto.Unmarshal(data, message)
+	if err != nil {
+		return fmt.Errorf("cannot unmarshal binary data from file: %w", err)
+	}
+	return nil
+}
