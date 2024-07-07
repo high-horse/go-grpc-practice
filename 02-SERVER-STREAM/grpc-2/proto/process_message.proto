@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package process_management;
+
+option go_package = "../pb;pb";
+
+message ProcessRequest{}
+
+message ProcessResponse{
+    uint32 process_id = 1;
+    string process_name = 2;
+    float cpu_usage = 3;
+    float memory_usage = 4;
+    string mem_unit = 5;
+}

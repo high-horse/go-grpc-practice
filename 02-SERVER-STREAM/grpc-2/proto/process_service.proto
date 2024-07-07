@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package process_management;
+
+option go_package = "../pb;pb";
+
+import "process_message.proto";
+service Processes {
+    rpc GetProcessesInfo(ProcessRequest) returns (stream ProcessResponse) {}
+}
