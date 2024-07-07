@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package weather;
+option go_package = "../pb;pb";
+
+import "weather_message.proto";
+
+service WeatherService {
+    rpc GetWeatherUpdates (WeatherRequest) returns (stream WeatherResponse) {}
+}

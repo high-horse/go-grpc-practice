@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package weather;
+
+option go_package = "../pb;pb";
+
+message WeatherRequest {
+    string city = 1;
+}
+
+message WeatherResponse {
+    string city = 1;
+    string weather = 2;
+    string temperature = 3;
+    string update = 4;
+}
