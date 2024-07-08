@@ -29,7 +29,8 @@ func main() {
 		}
 		log.Println(" Process Id:",resp.ProcessId)
 		log.Println(" Process Name:",resp.ProcessName)
-		log.Println(" Cpu Usage:",resp.CpuUsage)
+		log.Printf(" Cpu Usage: %.4f %",resp.CpuUsage)
 		log.Printf(" Memory Usage: %.2f %s",resp.MemoryUsage, resp.MemUnit)
+		println("")
 	}
 }

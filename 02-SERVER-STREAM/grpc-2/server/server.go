@@ -45,7 +45,7 @@ func (s *server) GetProcessesInfo(request *pb.ProcessRequest, stream pb.Processe
 			return err
 		}
 
-		time.Sleep(time.Millisecond * 10)
+		time.Sleep(time.Millisecond * 100)
 	}
 	return nil
 }
