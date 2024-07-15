@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "../pb;pb";
+
+message ProductResponse{
+    string id = 1;
+    string title = 2;
+    string price = 3;
+    string description = 4;
+    string category = 5;
+    string image = 6;
+    Rating rating = 7;
+}
+
+message Rating {
+    float rate = 1;
+    uint32 count = 2;
+}
+
+message ProductRequest {}
+
+message ProductList {
+    repeated ProductResponse products = 1;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "../pb;pb";
+
+import "proto_model.proto";
+
+service ProductService {
+    rpc GetProduct (ProductRequest) returns (ProductList) {}
+    rpc GetProductStream (ProductRequest) returns (stream ProductResponse) {}
+}
