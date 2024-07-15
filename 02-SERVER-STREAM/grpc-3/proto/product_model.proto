@@ -4,7 +4,7 @@ package product;
 
 option go_package = "../pb;pb";
 
-message ProductResponse{
+message ProductResponse {
     string id = 1;
     string title = 2;
     string price = 3;
@@ -14,13 +14,13 @@ message ProductResponse{
     Rating rating = 7;
 }
 
+message ProductList {
+    repeated ProductResponse products = 1;
+}
+
 message Rating {
     float rate = 1;
     uint32 count = 2;
 }
 
 message ProductRequest {}
-
-message ProductList {
-    repeated ProductResponse products = 1;
-}
