@@ -29,6 +29,8 @@ func unaryInterseptor(
 		return nil, status.Errorf(status.Code(err), "Unary call failed, %v", err)
 	}
 
+	
+
 	return resp, err
 }
 
