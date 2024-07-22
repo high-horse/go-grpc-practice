@@ -1,3 +1,5 @@
-node_modues/
+# Ignore all node_modules directories
+node_modules/
 
-./02-SERVER-STREAM/grpc-3/node-js/node_modues
+# Explicitly ignore the specific node_modules directory
+02-SERVER-STREAM/grpc-3/node-js/node_modules/
