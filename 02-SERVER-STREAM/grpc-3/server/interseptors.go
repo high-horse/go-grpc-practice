@@ -25,3 +25,18 @@ func unaryInterseptor(
 	return resp, err
 }
 
+func streamInterceptor(
+	srv interface{},
+	ss grpc.ServerStream,
+	info *grpc.StreamServerInfo,
+	handler grpc.StreamHandler,
+) error {
+	log.Printf("INtercepted stream call : %v", info.FullMethod)
+
+	err := handler(srv, ss)
+	if err != nil {
+		log.Printf("Error from Stream call: %v", err)
+		return status.Errorf(status.Code(err), "Stream call failed: %v", err)
+	}
+	return nil
+}

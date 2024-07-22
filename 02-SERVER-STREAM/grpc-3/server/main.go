@@ -9,12 +9,10 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-
 const URL = "https://fakestoreapi.com/products"
 const ADDRESS = ":50051"
 
-
-func main() {	
+func main() {
 	println("server starting at " + ADDRESS)
 
 	listener, err := net.Listen("tcp", ADDRESS)
@@ -24,6 +22,7 @@ func main() {
 
 	serv := grpc.NewServer(
 		grpc.UnaryInterceptor(unaryInterseptor),
+		grpc.StreamInterceptor(streamInterceptor),
 	)
 	proto.RegisterProductServiceServer(serv, &Server{})
 
@@ -33,4 +32,3 @@ func main() {
 		log.Fatalf("Could not start server \n", err)
 	}
 }
-
