@@ -14,6 +14,9 @@ serve:
 client:
 	cd client && go run .
 
+npm-client:
+	cd node && npm start
+
 help:
 	@echo "gen: generate pb"
 	@echo "clean: clean pb"
