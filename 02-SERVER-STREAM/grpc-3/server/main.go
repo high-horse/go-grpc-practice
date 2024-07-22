@@ -12,6 +12,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
 type Server struct {
@@ -19,6 +20,27 @@ type Server struct {
 }
 
 const URL = "https://fakestoreapi.com/products"
+
+
+func unaryInterseptor(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	handler grpc.UnaryHandler,
+) (interface{}, error) {
+	log.Printf("intercepted Unary call: %v", info.FullMethod)
+
+	resp, err := handler(ctx, req)
+	if err != nil {
+		log.Printf("error from unary call : %v", err)
+		return nil, status.Errorf(status.Code(err), "Unary call failed, %v", err)
+	}
+
+	
+
+	return resp, err
+}
+
 
 func main() {
 	// res, err := CallHttpRequest()
@@ -39,7 +61,9 @@ func main() {
 		log.Fatalf("Couldnot start server \n", err)
 	}
 
-	serv := grpc.NewServer()
+	serv := grpc.NewServer(
+		grpc.UnaryInterceptor(unaryInterseptor),
+	)
 	proto.RegisterProductServiceServer(serv, &Server{})
 
 	reflection.Register(serv)
