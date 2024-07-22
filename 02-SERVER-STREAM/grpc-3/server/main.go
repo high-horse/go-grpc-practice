@@ -9,6 +9,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -20,6 +21,7 @@ type Server struct {
 }
 
 const URL = "https://fakestoreapi.com/products"
+const ADDRESS = ":50051"
 
 
 func unaryInterseptor(
@@ -53,10 +55,10 @@ func main() {
 
 	// return
 
-	address := ":50051"
-	println("server starting at " + address)
+	
+	println("server starting at " + ADDRESS)
 
-	listener, err := net.Listen("tcp", address)
+	listener, err := net.Listen("tcp", ADDRESS)
 	if err != nil {
 		log.Fatalf("Couldnot start server \n", err)
 	}
@@ -93,6 +95,23 @@ func (s *Server) GetProduct(context.Context, *proto.ProductRequest) (*proto.Prod
 	}
 
 	return &products, nil
+}
+
+func (s *Server) GetProductStream(req *proto.ProductRequest, stream proto.ProductService_GetProductStreamServer) error {
+	for {
+		httpRes, err := CallHttpRequest()
+		if err != nil {
+			return err
+			break
+		}
+		for _, res := range httpRes {
+			if err := stream.Send(res); err != nil {
+				return err
+			}
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
+	return nil
 }
 
 func CallHttpRequest() ([]*proto.ProductResponse, error) {
