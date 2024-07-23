@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package news;
+
+option go_package = "../pb;pb";
+
+import "news_models.proto";
+
+service Newservice {
+    rpc GetNews(NewsRequest) returns (stream News) {};
+}

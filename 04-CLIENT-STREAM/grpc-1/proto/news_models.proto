@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package news;
+
+option go_package = "../pb;pb";
+
+message NewsRequest{
+    string country = 1;
+}
+
+message Source{
+    string id = 1;
+    string name = 2;
+}
+
+message News{
+    Source source = 1;
+    string author = 2;
+    string title = 3;
+    string description = 4;
+    string publishedAt = 5;
+}
+
+message BulkNews {
+    repeated  News news = 1;
+}
