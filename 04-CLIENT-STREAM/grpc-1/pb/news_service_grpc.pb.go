@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Newservice_GetNews_FullMethodName = "/news.Newservice/GetNews"
+	Newservice_GetNewsStream_FullMethodName = "/news.Newservice/GetNewsStream"
 )
 
 // NewserviceClient is the client API for Newservice service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NewserviceClient interface {
-	GetNews(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (Newservice_GetNewsClient, error)
+	GetNewsStream(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (Newservice_GetNewsStreamClient, error)
 }
 
 type newserviceClient struct {
@@ -37,13 +37,13 @@ func NewNewserviceClient(cc grpc.ClientConnInterface) NewserviceClient {
 	return &newserviceClient{cc}
 }
 
-func (c *newserviceClient) GetNews(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (Newservice_GetNewsClient, error) {
+func (c *newserviceClient) GetNewsStream(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (Newservice_GetNewsStreamClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &Newservice_ServiceDesc.Streams[0], Newservice_GetNews_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Newservice_ServiceDesc.Streams[0], Newservice_GetNewsStream_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &newserviceGetNewsClient{ClientStream: stream}
+	x := &newserviceGetNewsStreamClient{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -53,16 +53,16 @@ func (c *newserviceClient) GetNews(ctx context.Context, in *NewsRequest, opts ..
 	return x, nil
 }
 
-type Newservice_GetNewsClient interface {
+type Newservice_GetNewsStreamClient interface {
 	Recv() (*News, error)
 	grpc.ClientStream
 }
 
-type newserviceGetNewsClient struct {
+type newserviceGetNewsStreamClient struct {
 	grpc.ClientStream
 }
 
-func (x *newserviceGetNewsClient) Recv() (*News, error) {
+func (x *newserviceGetNewsStreamClient) Recv() (*News, error) {
 	m := new(News)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (x *newserviceGetNewsClient) Recv() (*News, error) {
 // All implementations must embed UnimplementedNewserviceServer
 // for forward compatibility
 type NewserviceServer interface {
-	GetNews(*NewsRequest, Newservice_GetNewsServer) error
+	GetNewsStream(*NewsRequest, Newservice_GetNewsStreamServer) error
 	mustEmbedUnimplementedNewserviceServer()
 }
 
@@ -82,8 +82,8 @@ type NewserviceServer interface {
 type UnimplementedNewserviceServer struct {
 }
 
-func (UnimplementedNewserviceServer) GetNews(*NewsRequest, Newservice_GetNewsServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetNews not implemented")
+func (UnimplementedNewserviceServer) GetNewsStream(*NewsRequest, Newservice_GetNewsStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetNewsStream not implemented")
 }
 func (UnimplementedNewserviceServer) mustEmbedUnimplementedNewserviceServer() {}
 
@@ -98,24 +98,24 @@ func RegisterNewserviceServer(s grpc.ServiceRegistrar, srv NewserviceServer) {
 	s.RegisterService(&Newservice_ServiceDesc, srv)
 }
 
-func _Newservice_GetNews_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Newservice_GetNewsStream_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(NewsRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(NewserviceServer).GetNews(m, &newserviceGetNewsServer{ServerStream: stream})
+	return srv.(NewserviceServer).GetNewsStream(m, &newserviceGetNewsStreamServer{ServerStream: stream})
 }
 
-type Newservice_GetNewsServer interface {
+type Newservice_GetNewsStreamServer interface {
 	Send(*News) error
 	grpc.ServerStream
 }
 
-type newserviceGetNewsServer struct {
+type newserviceGetNewsStreamServer struct {
 	grpc.ServerStream
 }
 
-func (x *newserviceGetNewsServer) Send(m *News) error {
+func (x *newserviceGetNewsStreamServer) Send(m *News) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -128,8 +128,8 @@ var Newservice_ServiceDesc = grpc.ServiceDesc{
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetNews",
-			Handler:       _Newservice_GetNews_Handler,
+			StreamName:    "GetNewsStream",
+			Handler:       _Newservice_GetNewsStream_Handler,
 			ServerStreams: true,
 		},
 	},
