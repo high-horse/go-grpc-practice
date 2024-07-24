@@ -2,7 +2,7 @@ package fetcher
 
 type HttpResponse struct {
 	Status       string    `json:"status"`
-	TotalResults string    `json:"totalResults"`
+	TotalResults uint32    `json:"totalResults"`
 	Articles     []Article `json:"articles"`
 }
 

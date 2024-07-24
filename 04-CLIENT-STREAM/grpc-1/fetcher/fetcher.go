@@ -2,7 +2,6 @@ package fetcher
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 const URL = "https://newsapi.org/v2/top-headlines?sortBy=popularity&country=us"
 const KEY = "&apiKey=bb67b0b40e014e9fb990a274637e73ad"
 
-func FetchNews(country string) {
+func FetchNews(country string) ([]Article, error){
 	url := URL + KEY
 	res, err := http.Get(url)
 	Check(err)
@@ -20,15 +19,11 @@ func FetchNews(country string) {
 	allnews, err := io.ReadAll(res.Body)
 	Check(err)
 
-	var newsResponse HttpResponse
+	var newsResponse *HttpResponse
 	err = json.Unmarshal(allnews, &newsResponse)
-	for _, news := range newsResponse.Articles {
-		// fmt.Printf("",news)
-		fmt.Println(news.Source.Name)
-		fmt.Println(news.Author)
-		fmt.Println(news.Title)
-	}
+	Check(err)
 
+	return newsResponse.Articles, nil
 }
 
 func Check(err error) {
