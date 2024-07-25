@@ -1,9 +1,6 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"grpc-1/fetcher"
 	"log"
 	"net"
 
@@ -15,17 +12,17 @@ import (
 
 const PORT = ":50051"
 type Server struct {
-	// proto.UnimplementedNewserviceServer
 	proto.UnimplementedNewserviceServer
 }
 
 func main() {
-	println("Server starting at : %s", PORT)
+	println("Server starting at ", PORT)
 	listener, err := net.Listen("tcp", PORT)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// create a new grpc server
 	serv := grpc.NewServer()
 	proto.RegisterNewserviceServer(serv, &Server{})
 	reflection.Register(serv)
@@ -36,19 +33,9 @@ func main() {
 }
 
 
-
-
-func (s * Server) GetNewsStream(ctx context.Context, in *proto.NewsRequest) (proto.Newservice_GetNewsStreamClient, error) {
-	return nil, nil
+func (s *Server) GetNewsStream(req *proto.NewsRequest, stream proto.Newservice_GetNewsStreamServer) error {
+	
+	return  nil
 }
 
-func fetch() {
-	articles, err := fetcher.FetchNews("us")
-	if err != nil {
-		log.Fatalf("error :", err)
-	}
-	for _, article := range articles {
-		fmt.Printf("title: %v \n", article.Title)
-	}
-}
 
