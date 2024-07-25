@@ -47,7 +47,25 @@ func main() {
 
 func (s *Server) GetNewsStream(req *proto.NewsRequest, stream proto.Newservice_GetNewsStreamServer) error {
 
-	news, err := fetcher.
+	fetchedNews, err := fetcher.FetchNews("us")
+	if err != nil {
+		return err
+	}
+
+	for _, news := range fetchedNews{
+		source := proto.Source{
+			Id: news.Source.ID,
+			Name: news.Source.Name,
+		}
+		resNews := &proto.News{
+			Source: &source,
+			
+		}
+		if err := stream.Send(resNews); err != nil {
+
+		}
+	}
+
 	return  nil
 }
 
