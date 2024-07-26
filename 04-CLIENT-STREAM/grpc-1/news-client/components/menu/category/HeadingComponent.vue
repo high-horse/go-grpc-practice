@@ -7,6 +7,7 @@
         color="primary"
         variant="solid"
         :trailing="false"
+        @click="$emit('new-content')"
       />
     </div>
     <hr />

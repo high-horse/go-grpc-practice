@@ -1,7 +1,10 @@
 <template>
     <div class="flex flex-wrap">
         <div class="w-full md:w-2/12">
-            <MenuCategoryComponent @item-clicked="clickedCategory"/>
+            <MenuCategoryComponent 
+            @category-clicked="clickedCategory"
+            @new-content="generateNewContent"
+            />
         </div>
         <div class="w-full md:w-2/12">
             <MenuListComponent />
@@ -15,8 +18,23 @@
 
 
 <script setup lang="ts">
-
-const clickedCategory = (key: string) => {
-    console.log("item clicked: ", key)
+const clickedCategory = async (key: string) => {
+    // try {
+    //     await getNewsBulk()
+    // } catch (err) {
+    //     console.error('Failed to fetch news:', err)
+    // }
 }
+
+const generateNewContent = () => {
+    // todo generate new content
+    console.log("generate new content");
+}
+
+
+onMounted(() => {
+    console.log("mounted to the index page");
+    
+})
+
 </script>

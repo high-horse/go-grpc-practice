@@ -1,6 +1,6 @@
 <template>
     <div class="border-div">
-        <MenuCategoryHeadingComponent />
+        <MenuCategoryHeadingComponent @new-content="emitNewContent()" />
        <div>
             <ul>
 
@@ -22,6 +22,7 @@
 
 const emit = defineEmits<{
     (event: 'category-clicked', key: string): void;
+    (event: 'new-content'): void;
 }>();
 
 const options = {
@@ -38,6 +39,11 @@ const setActiveOption = (key: string) => {
     activeOption.value = key;
     emit('category-clicked', key);
 };
+
+const emitNewContent = () => {
+    setActiveOption("")
+    emit('new-content')
+}
 
 </script>
 
