@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"grpc-1/fetcher"
+	proto "grpc-1/pb"
 	"log"
 )
 
@@ -16,3 +17,15 @@ func fetch() {
 	}
 }
 
+func ArticleToNews(article fetcher.Article) *proto.News {
+	return &proto.News{
+		Source: &proto.Source{
+			Id: article.Source.ID,
+			Name: article.Source.Name,
+		},
+		Author: article.Author,
+		Title: article.Title,
+		Description: article.Description,
+		PublishedAt: article.PublishedAt,
+	}
+}

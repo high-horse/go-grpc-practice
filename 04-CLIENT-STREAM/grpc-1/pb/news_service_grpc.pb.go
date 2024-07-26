@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	Newservice_GetNewsStream_FullMethodName = "/news.Newservice/GetNewsStream"
+	Newservice_GetNewsBulk_FullMethodName   = "/news.Newservice/GetNewsBulk"
 )
 
 // NewserviceClient is the client API for Newservice service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NewserviceClient interface {
 	GetNewsStream(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (Newservice_GetNewsStreamClient, error)
+	GetNewsBulk(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (*BulkNews, error)
 }
 
 type newserviceClient struct {
@@ -70,11 +72,22 @@ func (x *newserviceGetNewsStreamClient) Recv() (*News, error) {
 	return m, nil
 }
 
+func (c *newserviceClient) GetNewsBulk(ctx context.Context, in *NewsRequest, opts ...grpc.CallOption) (*BulkNews, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BulkNews)
+	err := c.cc.Invoke(ctx, Newservice_GetNewsBulk_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NewserviceServer is the server API for Newservice service.
 // All implementations must embed UnimplementedNewserviceServer
 // for forward compatibility
 type NewserviceServer interface {
 	GetNewsStream(*NewsRequest, Newservice_GetNewsStreamServer) error
+	GetNewsBulk(context.Context, *NewsRequest) (*BulkNews, error)
 	mustEmbedUnimplementedNewserviceServer()
 }
 
@@ -84,6 +97,9 @@ type UnimplementedNewserviceServer struct {
 
 func (UnimplementedNewserviceServer) GetNewsStream(*NewsRequest, Newservice_GetNewsStreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetNewsStream not implemented")
+}
+func (UnimplementedNewserviceServer) GetNewsBulk(context.Context, *NewsRequest) (*BulkNews, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNewsBulk not implemented")
 }
 func (UnimplementedNewserviceServer) mustEmbedUnimplementedNewserviceServer() {}
 
@@ -119,13 +135,36 @@ func (x *newserviceGetNewsStreamServer) Send(m *News) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Newservice_GetNewsBulk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NewsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewserviceServer).GetNewsBulk(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Newservice_GetNewsBulk_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewserviceServer).GetNewsBulk(ctx, req.(*NewsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Newservice_ServiceDesc is the grpc.ServiceDesc for Newservice service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Newservice_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "news.Newservice",
 	HandlerType: (*NewserviceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetNewsBulk",
+			Handler:    _Newservice_GetNewsBulk_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "GetNewsStream",
