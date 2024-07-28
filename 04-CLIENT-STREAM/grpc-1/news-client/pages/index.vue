@@ -7,7 +7,12 @@
             />
         </div>
         <div class="w-full md:w-2/12">
-            <MenuListComponent />
+            <MenuListComponent 
+                :news="news"
+                :error="error"
+                :isLoading="isLoading"
+                :fetchNews="fetchNews"
+            />
         </div>
         <div class="w-full md:w-8/12">
             <MenuDetailComponent />    

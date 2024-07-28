@@ -1,21 +1,5 @@
 import type { UseFetchOptions } from "#app";
-
-interface NewsSource {
-    id: string;
-    name: string;
-}
-
-interface NewsItem {
-    source: NewsSource;
-    author: string;
-    title: string;
-    description: string;
-    publishedAt: string;
-}
-
-interface NewsResponse {
-    news: NewsItem[];
-}
+import type { NewsItem, NewsResponse } from '../types';
 
 export const useGetNews = (
   endpoint: string,

@@ -1,3 +1,35 @@
 <template>
-    <h1>Listcomponent</h1>
+    <div>
+        <div v-if="isLoading">Loading ...</div>
+        <div v-else-if="error">{{ error.message }}</div>
+        <div class="bordered-div" v-else-if="news" >
+            <ul>
+                <li v-for="item in news" :key="item.source.id"><b>{{ item.title }}</b> <i>{{ item.author }}</i></li>
+                <hr>
+            </ul>
+        </div>
+       
+    </div>
 </template>
+
+<script setup lang="ts">
+/* __placeholder__ */
+import type { NewsItem } from '~/types';
+
+const props = defineProps<{
+    news: Ref<NewsItem[] | null>;
+    error: Ref<Error | null>;
+    isLoading: Ref<boolean>;
+    fetchNews: () => Promise<void>;
+}>();
+</script>
+
+<style scoped>
+.bordered-div{
+    border: 1px solid rgb(17, 85, 233);
+    border-radius: 10px;
+    padding: 10px;
+    height: 100vh;
+    overflow-y: scroll;
+}
+</style>
