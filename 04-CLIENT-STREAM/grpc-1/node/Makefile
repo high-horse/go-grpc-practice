@@ -1,7 +1,13 @@
-.PHONY: compile run
+.PHONY: compile run test http
 
 compile :
 	npx tsc
 
 run:
 	node dist/index.js
+
+test:
+	node client.js
+
+http:
+	node dist/httpWrapper.js

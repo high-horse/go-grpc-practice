@@ -18,12 +18,14 @@
 
 
 <script setup lang="ts">
+const { getNewsBulk } = useNewsService()
+
 const clickedCategory = async (key: string) => {
-    // try {
-    //     await getNewsBulk()
-    // } catch (err) {
-    //     console.error('Failed to fetch news:', err)
-    // }
+    try {
+        await getNewsBulk ()
+    } catch (e) {
+        console.error('Failed to fetch news:', e)
+    }
 }
 
 const generateNewContent = () => {

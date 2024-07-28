@@ -1,5 +1,5 @@
-const grpc = require('@grpc/grpc-js');
-const protoLoader = require('@grpc/proto-loader');
+import * as grpc from '@grpc/grpc-js';
+import * as protoLoader from '@grpc/proto-loader';
 
 const SERVER = 'localhost:50051';
 
@@ -13,15 +13,32 @@ const packageDefinition = protoLoader.loadSync(protoFiles, {
     oneofs: true
 });
 
-const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-const newsProto = protoDescriptor.news; // Assuming the package name in your .proto files is 'news'
+const protoDescriptor = grpc.loadPackageDefinition(packageDefinition) as any;
+const newsProto = protoDescriptor.news as any; // Assuming the package name in your .proto files is 'news'
 
 const client = new newsProto.Newservice(SERVER, grpc.credentials.createInsecure());
 
-function getNewsBulk() {
+interface NewsSource {
+    id: string;
+    name: string;
+}
+
+interface NewsItem {
+    source: NewsSource;
+    author: string;
+    title: string;
+    description: string;
+    publishedAt: string;
+}
+
+interface NewsResponse {
+    news: NewsItem[];
+}
+
+function getNewsBulk(): void {
     const request = {}; // Empty request for NewsRequest
 
-    client.GetNewsBulk(request, (error, response) => {
+    client.GetNewsBulk(request, (error: grpc.ServiceError | null, response: NewsResponse) => {
         if (error) {
             console.error("Error:", error);
             return;
