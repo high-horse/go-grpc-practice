@@ -5,7 +5,6 @@ import * as http from 'http';
 const SERVER = 'localhost:50051';
 const HTTP_PORT = 8000;
 
-// Load the protobuf files
 const protoFiles = ["../proto/news_models.proto", "../proto/news_service.proto"];
 const packageDefinition = protoLoader.loadSync(protoFiles, {
     keepCase: true,
@@ -16,7 +15,7 @@ const packageDefinition = protoLoader.loadSync(protoFiles, {
 });
 
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition) as any;
-const newsProto = protoDescriptor.news as any; // Assuming the package name in your .proto files is 'news'
+const newsProto = protoDescriptor.news as any;
 const client = new newsProto.Newservice(SERVER, grpc.credentials.createInsecure());
 
 interface NewsSource {
@@ -38,7 +37,7 @@ interface NewsResponse {
 
 function getNewsBulk(): Promise<NewsResponse> {
     return new Promise((resolve, reject) => {
-        const request = {}; // Empty request for NewsRequest
+        const request = {};
         client.GetNewsBulk(request, (error: grpc.ServiceError | null, response: NewsResponse) => {
             if (error) {
                 reject(error);
@@ -49,8 +48,27 @@ function getNewsBulk(): Promise<NewsResponse> {
     });
 }
 
-// Create HTTP server
 const server = http.createServer(async (req, res) => {
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+
+    const allowedOrigins = ['http://localhost:3000'];
+    const origin = req.headers.origin as string;
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    }
+
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+    }
+
     if (req.url === '/news' && req.method === 'GET') {
         try {
             const newsResponse = await getNewsBulk();
@@ -67,7 +85,6 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-// Start the HTTP server
 server.listen(HTTP_PORT, () => {
     console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
 });

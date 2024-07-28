@@ -18,11 +18,30 @@
 
 
 <script setup lang="ts">
-const { getNewsBulk } = useNewsService()
+import { watchEffect } from 'vue';
+
+
+const { news, error, isLoading, fetchNews } = useGetNews('news', 'GET', null)
+
+watchEffect(() => {
+    if (news.value) {
+        console.log('News updated:', news.value)
+        // Update your component state or do something with the news
+    }
+    if (error.value) {
+        console.error('Error occurred:', error.value)
+        // Handle the error
+    }
+})
 
 const clickedCategory = async (key: string) => {
     try {
-        await getNewsBulk ()
+        console.log(key)
+        // const { news: otherNews, error: otherError, isLoading: otherLoading, fetchNews: fetchOtherNews } = useGetNews('other-endpoint', 'POST', { someData: 'value' })
+        // const { news: otherNews, error: otherError, isLoading: otherLoading, fetchNews: fetchOtherNews } = useGetNews('news', 'GET', null)
+        console.log(key)
+        await fetchNews()
+        
     } catch (e) {
         console.error('Failed to fetch news:', e)
     }

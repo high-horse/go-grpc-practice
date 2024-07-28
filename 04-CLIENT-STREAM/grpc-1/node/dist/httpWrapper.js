@@ -37,7 +37,6 @@ const protoLoader = __importStar(require("@grpc/proto-loader"));
 const http = __importStar(require("http"));
 const SERVER = 'localhost:50051';
 const HTTP_PORT = 8000;
-// Load the protobuf files
 const protoFiles = ["../proto/news_models.proto", "../proto/news_service.proto"];
 const packageDefinition = protoLoader.loadSync(protoFiles, {
     keepCase: true,
@@ -47,11 +46,11 @@ const packageDefinition = protoLoader.loadSync(protoFiles, {
     oneofs: true
 });
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-const newsProto = protoDescriptor.news; // Assuming the package name in your .proto files is 'news'
+const newsProto = protoDescriptor.news;
 const client = new newsProto.Newservice(SERVER, grpc.credentials.createInsecure());
 function getNewsBulk() {
     return new Promise((resolve, reject) => {
-        const request = {}; // Empty request for NewsRequest
+        const request = {};
         client.GetNewsBulk(request, (error, response) => {
             if (error) {
                 reject(error);
@@ -61,8 +60,23 @@ function getNewsBulk() {
         });
     });
 }
-// Create HTTP server
 const server = http.createServer((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    console.log("allow 3000:");
+    const allowedOrigins = ['http://localhost:3000'];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    }
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+    }
     if (req.url === '/news' && req.method === 'GET') {
         try {
             const newsResponse = yield getNewsBulk();
@@ -80,7 +94,6 @@ const server = http.createServer((req, res) => __awaiter(void 0, void 0, void 0,
         res.end(JSON.stringify({ error: 'Not Found' }));
     }
 }));
-// Start the HTTP server
 server.listen(HTTP_PORT, () => {
     console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
 });
