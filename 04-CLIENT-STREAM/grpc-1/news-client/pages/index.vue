@@ -12,10 +12,11 @@
                 :error="error"
                 :isLoading="isLoading"
                 :fetchNews="fetchNews"
+                @news-clicked="newsSelected"
             />
         </div>
         <div class="w-full md:w-8/12">
-            <MenuDetailComponent />    
+            <MenuDetailComponent :selectedNews="selectedNews"/>    
         </div>
     </div>
 </template>
@@ -24,9 +25,11 @@
 
 <script setup lang="ts">
 import { watchEffect } from 'vue';
+import type { NewsItem } from '~/types';
 
 
 const { news, error, isLoading, fetchNews } = useGetNews('news', 'GET', null)
+const selectedNews = ref<NewsItem | null>(null);
 
 watchEffect(() => {
     if (news.value) {
@@ -52,11 +55,20 @@ const clickedCategory = async (key: string) => {
     }
 }
 
+const newsSelected = async (title: string) => {
+    console.log("Selected news: ", title);
+    // loop over news and get the news title same as this title, get the news content 
+    // pass the whole NewsItem as props to <MenuDetailComponent />    
+    const newsItem = news.value?.find(item => item.title === title) || null;
+    selectedNews.value = newsItem;
+    console.log(selectedNews.value);
+    
+}
+
 const generateNewContent = () => {
     // todo generate new content
     console.log("generate new content");
 }
-
 
 onMounted(() => {
     console.log("mounted to the index page");

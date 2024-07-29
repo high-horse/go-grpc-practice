@@ -4,7 +4,14 @@
         <div v-else-if="error">{{ error.message }}</div>
         <div class="bordered-div" v-else-if="news" >
             <ul>
-                <li v-for="item in news" :key="item.source.id"><b>{{ item.title }}</b> <i>{{ item.author }}</i></li>
+                <li 
+                    v-for="item in news" 
+                    :key="item.source.id" 
+                    :class="{ selected: selectedItem === item }"
+                    @click="clicked_news(item)"
+                >
+                    <b>{{ item.title }}</b> <i>{{ item.author }}</i>
+                </li>
                 <hr>
             </ul>
         </div>
@@ -22,6 +29,17 @@ const props = defineProps<{
     isLoading: Ref<boolean>;
     fetchNews: () => Promise<void>;
 }>();
+
+const emit = defineEmits<{
+    (event: 'news-clicked', key: string): void
+}>()
+
+const selectedItem = ref<NewsItem | null>(null);
+
+const clicked_news = (item: NewsItem) => {
+    selectedItem.value = item;
+    emit('news-clicked', item.title);
+}
 </script>
 
 <style scoped>
@@ -31,5 +49,8 @@ const props = defineProps<{
     padding: 10px;
     height: 100vh;
     overflow-y: scroll;
+}
+.selected {
+    background-color: #2f0cf3;
 }
 </style>
