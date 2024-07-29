@@ -48,6 +48,7 @@ const clickedCategory = async (key: string) => {
         // const { news: otherNews, error: otherError, isLoading: otherLoading, fetchNews: fetchOtherNews } = useGetNews('other-endpoint', 'POST', { someData: 'value' })
         // const { news: otherNews, error: otherError, isLoading: otherLoading, fetchNews: fetchOtherNews } = useGetNews('news', 'GET', null)
         console.log(key)
+        selectedNews.value = null;
         await fetchNews()
         
     } catch (e) {

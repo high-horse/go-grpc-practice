@@ -79,13 +79,13 @@ const server = http.createServer((req, res) => __awaiter(void 0, void 0, void 0,
     if (req.url === '/news' && req.method === 'GET') {
         try {
             const newsResponse = yield getNewsBulk();
-            for (let index = 0; index < newsResponse.news.length; index++) {
-                const element = newsResponse.news[index];
-                console.log(`News Item ${index}:`, element);
-                if (!element.description) {
-                    console.warn(`News Item ${index} has an empty description`);
-                }
-            }
+            // for (let index = 0; index < newsResponse.news.length; index++) {
+            //     const element = newsResponse.news[index];
+            //     console.log(`News Item ${index}:`, element);
+            //     if (!element.description) {
+            //         console.warn(`News Item ${index} has an empty description`);
+            //     }
+            // }
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(newsResponse));
         }
