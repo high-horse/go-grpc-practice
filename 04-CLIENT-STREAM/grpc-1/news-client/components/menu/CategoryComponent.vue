@@ -37,7 +37,9 @@ const activeOption = ref<string | null>(null);
 
 const setActiveOption = (key: string) => {
     activeOption.value = key;
-    emit('category-clicked', key);
+    if (key) {
+        emit('category-clicked', key);
+    }
 };
 
 const emitNewContent = () => {

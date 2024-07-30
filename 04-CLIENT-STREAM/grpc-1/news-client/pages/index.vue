@@ -2,8 +2,8 @@
     <div class="flex flex-wrap">
       <div class="w-full md:w-2/12">
         <MenuCategoryComponent 
+        @new-content="generateNewContent"
           @category-clicked="clickedCategory"
-          @new-content="generateNewContent"
         />
       </div>
       <div class="w-full md:w-2/12">
@@ -64,10 +64,10 @@
       description: "",
       publishedAt: "",
     };
-  
+    news.value = [];
     // Add the new "UNTITLED" item to the news list
     if (news.value) {
-      news.value = [untitledNews, ...news.value];
+      news.value = [untitledNews];
     } else {
       news.value = [untitledNews];
     }
