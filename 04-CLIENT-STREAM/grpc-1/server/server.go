@@ -4,7 +4,6 @@ import (
 	"context"
 	"grpc-1/fetcher"
 	proto "grpc-1/pb"
-	"log"
 )
 
 type Server struct {
@@ -47,8 +46,8 @@ func (s *Server) GetNewsBulk(ctx context.Context, req *proto.NewsRequest) (*prot
 	}
 	var newslist  []*proto.News
 	for _, article := range fetchedArticles{
-		log.Printf("data-fetched: ",article)
-		println("")
+		// log.Printf("data-fetched: ",article)
+		// println("")
 		newslist = append(newslist, ArticleToNews(article))
 	}
 	resp.News = newslist

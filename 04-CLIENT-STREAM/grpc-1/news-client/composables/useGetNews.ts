@@ -12,8 +12,6 @@ export const useGetNews = (
   const news: Ref<NewsItem[] | null> = ref(null);
   const error: Ref<Error | null> = ref(null);
   const isLoading = ref(false);
-  console.log("fetching news ....");
-  
 
   const fetchNews = async () => {
     isLoading.value = true;

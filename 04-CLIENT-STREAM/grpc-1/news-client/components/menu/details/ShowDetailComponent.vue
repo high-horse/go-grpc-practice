@@ -22,8 +22,8 @@
           
       <p class="flex justify-end"><i>{{ selectedNews.publishedAt }}</i></p>
       <div>
-        <div style="width: 80%;"></div>
-        <div class="flex justify-end" style="width: 20%;">
+        
+        <div class="flex justify-end" style="">
           <UButton
             icon="i-heroicons-pencil-square"
             size="sm"

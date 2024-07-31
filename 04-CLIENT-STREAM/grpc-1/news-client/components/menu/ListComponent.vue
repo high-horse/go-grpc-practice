@@ -1,18 +1,19 @@
 <template>
     <div>
         <div v-if="isLoading">Loading ...</div>
-        <div v-else-if="error">{{ error.message }}</div>
-        <div class="bordered-div" v-else-if="news" >
+        <div v-else-if="error">{{ error?.message }}</div>
+        <div class="bordered-div bordered-parent" v-else-if="news" >
             <ul>
                 <li 
                     v-for="item in news" 
-                    :key="item.source.id" 
+                    :key="item?.source.id" 
                     :class="{ selected: selectedItem === item }"
                     @click="clicked_news(item)"
                 >
-                    <b>{{ item.title }}</b> <i>{{ item.author }}</i>
+                    <div class="bordered-div">
+                        <b>{{ item?.title }}</b> <i>{{ item?.author }}</i>
+                    </div>
                 </li>
-                <hr>
             </ul>
         </div>
        
@@ -46,10 +47,15 @@ const clicked_news = (item: NewsItem) => {
 .bordered-div{
     border: 1px solid rgb(17, 85, 233);
     border-radius: 10px;
-    padding: 10px;
+    padding: 10px 5px;
+    margin: 10px 0;
+}
+
+.bordered-parent {
     height: 100vh;
     overflow-y: scroll;
 }
+
 .selected {
     background-color: #2f0cf3;
 }

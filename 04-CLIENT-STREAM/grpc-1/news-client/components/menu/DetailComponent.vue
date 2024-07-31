@@ -1,7 +1,7 @@
 <template>
     <div class="news-details" v-if="selectedNews" >
         <div v-if="selectedNews.title == 'UNTITLED'">
-            <MenuDetailsNewDertailComponent />
+            <MenuDetailsNewDetailComponent />
         </div>
         <div v-else>
             <MenuDetailsShowDetailComponent  :selectedNews="selectedNews" />    
@@ -19,21 +19,7 @@
     const props = defineProps<{
         selectedNews: NewsItem | null;
     }>()
-    // const isDisabled = ref(true);
 
-    // const enableEdit = () => {
-    //     // remove disabled from the UTextarea
-    //     console.log("edit clicked");
-        
-    //     isDisabled.value = false;
-    // };
-
-    // watch(
-    //     () => props.selectedNews,
-    //     () => {
-    //         isDisabled.value = true;
-    //     }
-    // );
 </script>
 
 <style scoped>
