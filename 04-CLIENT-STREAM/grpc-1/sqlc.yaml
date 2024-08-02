@@ -1,0 +1,8 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "store/queries"
+    schema: "store/schema"
+    gen:
+      go:
+        out: "store/database"
