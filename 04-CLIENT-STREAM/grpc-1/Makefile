@@ -1,4 +1,4 @@
-.PHONY: gen clean server client sqlc-i goose-i goose-up goose-down sqlc help
+.PHONY: gen clean server client sqlc-i goose-i goose-up goose-down sqlc help clean-sqlc
 
 # Generate gRPC code from proto files
 gen:
@@ -33,6 +33,9 @@ goose-down:
 # Generate code from SQL queries using sqlc
 sqlc:
 	sqlc generate
+
+clean-sqlc:
+	cd store && rm -rf database/*.go
 
 # Display help information
 help:
