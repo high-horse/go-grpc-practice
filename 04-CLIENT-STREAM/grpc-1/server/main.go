@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	db "grpc-1/database"
 	proto "grpc-1/pb"
 
 	"google.golang.org/grpc"
@@ -14,11 +15,20 @@ const PORT = ":50051"
 
 
 func main() {
+	log.Println("connection to database...")
+	err := db.ConnectDB()
+	if err != nil {
+		log.Fatalf("Failed to connect to Database: %v", err)
+	}
+	defer db.DisConnectDB()
+
 	println("Server starting at ", PORT)
+
 	listener, err := net.Listen("tcp", PORT)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 
 	// create a new grpc server
 	// serv := grpc.NewServer()
