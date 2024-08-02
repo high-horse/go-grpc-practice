@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	sqlc "grpc-1/store/database"
+	_ "github.com/lib/pq" // Import the PostgreSQL driver
 )
 
 type Config struct {
