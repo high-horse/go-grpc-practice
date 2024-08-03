@@ -25,7 +25,7 @@ type Config struct {
 func LoadConfig() Config {
 	return Config{
 		Driver:   getEnv("DB_DRIVER", "postgres"),
-		Host:     getEnv("DB_HOST", "postgres"),
+		Host:     getEnv("DB_HOST", "localhost"),
 		Port:     getEnvInt("DB_PORT", 5432),
 		User:     getEnv("DB_USER", "postgres"),
 		Password: getEnv("DB_PASSWORD", "root"),
@@ -63,9 +63,7 @@ func ConnectDB() error {
 		"%s://%s:%s@%s:%d/%s?sslmode=%s",
 		config.Driver, config.User, config.Password, config.Host, config.Port, config.DBName, config.SSLMode,
 	)
-	log.Println("dsn")
-	db, err := sql.Open("postgres", dsn)
-	// db, err := sql.Open(config.Driver, dsn)
+	db, err := sql.Open(config.Driver, dsn)
 	if err != nil {
 		return fmt.Errorf("couldnot connect to DB : %w", err)
 	}
