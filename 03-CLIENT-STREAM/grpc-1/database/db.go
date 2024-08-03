@@ -56,6 +56,7 @@ var (
 	Queries *sqlc.Queries
 )
 
+
 func ConnectDB() error {
 	config := LoadConfig()
 
