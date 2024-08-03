@@ -10,7 +10,7 @@ import (
 
 type News struct {
 	ID          int64
-	Source      int64
+	Source      string
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString

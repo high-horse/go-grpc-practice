@@ -1,12 +1,12 @@
 -- +goose Up
 
 CREATE TABLE news (
-    id BIGINT PRIMARY KEY,
-    source BIGINT NOT NULL REFERENCES source(id),  -- Changed VARCHAR(255) to BIGINT
-    author VARCHAR(255),
-    title VARCHAR(1000),
-    description TEXT,
-    publishedAt TIMESTAMPTZ
+    id BIGINT PRIMARY KEY,  -- Primary key for the news table
+    source VARCHAR(255) NOT NULL REFERENCES source(source_id),  -- Foreign key reference to the source table
+    author VARCHAR(255),  -- Author of the news
+    title VARCHAR(1000) UNIQUE,  -- Title of the news, must be unique if required
+    description TEXT,  -- Description of the news
+    publishedAt TIMESTAMPTZ  -- Timestamp when the news was published
 );
 
 -- +goose Down

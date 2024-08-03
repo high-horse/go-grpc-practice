@@ -17,6 +17,10 @@ func (s *Server) GetNewsStream(req *proto.NewsRequest, stream proto.Newservice_G
 	if err != nil {
 		return err
 	}
+	
+	go func() {
+		
+	}()
 
 	for _, news := range fetchedNews{
 		response := ArticleToNews(news)
