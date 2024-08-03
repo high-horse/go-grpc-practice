@@ -3,12 +3,12 @@ package datastore
 import (
 	"context"
 	"fmt"
-	"grpc-1/store/database"
+	db "grpc-1/database"
 	"grpc-1/util/fetcher"
 	"log"
 )
 
-var dbQueries database.Queries
+
 
 func SaveNewsDB(fetchedArticle []fetcher.Article) error {
 
@@ -17,14 +17,16 @@ func SaveNewsDB(fetchedArticle []fetcher.Article) error {
 		
 		source, news := ArticleToDBData(article)
 
-		fmt.Printf("%s \t %s\n", source.SourceID, news.Title)
-		// continue
-		_, err := dbQueries.CreateSource(context.Background(), source)
+		fmt.Println(source)
+		fmt.Println(news)
+		continue
+		_, err := db.Queries.CreateSource(context.Background(), source)
 		if err != nil {
 			log.Printf("Source DB err :%v", err)
 		}
 
-		_, err = dbQueries.CreateNews(context.Background(), news)
+		// db
+		_, err = db.Queries.CreateNews(context.Background(), news)
 		if err != nil {
 			log.Printf("News DB err :%v", err)
 		}
