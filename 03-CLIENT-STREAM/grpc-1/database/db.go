@@ -63,6 +63,7 @@ func ConnectDB() error {
 		"%s://%s:%s@%s:%d/%s?sslmode=%s",
 		config.Driver, config.User, config.Password, config.Host, config.Port, config.DBName, config.SSLMode,
 	)
+	log.Println("dsn")
 	db, err := sql.Open("postgres", dsn)
 	// db, err := sql.Open(config.Driver, dsn)
 	if err != nil {
