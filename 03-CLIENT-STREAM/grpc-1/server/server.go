@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"grpc-1/fetcher"
 	proto "grpc-1/pb"
+	datastore "grpc-1/util/dataStore"
+	"grpc-1/util/fetcher"
 )
 
 type Server struct {
@@ -48,6 +49,7 @@ func (s *Server) GetNewsBulk(ctx context.Context, req *proto.NewsRequest) (*prot
 	if err != nil {
 		return nil, err
 	}
+	go datastore.SaveNewsDB(&fetchedArticles)
 	var newslist  []*proto.News
 	for _, article := range fetchedArticles{
 		// log.Printf("data-fetched: ",article)

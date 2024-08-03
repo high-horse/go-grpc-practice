@@ -6,6 +6,11 @@ import (
 	_ "grpc-1/store/database"
 )
 
+func StoreNews() {
+	
+}
+
+
 // this implementation of generics mignt work, who knows??
 
 

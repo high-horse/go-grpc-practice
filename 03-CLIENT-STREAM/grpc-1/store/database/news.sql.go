@@ -18,7 +18,7 @@ INSERT INTO news (
     description,
     publishedAt
 ) VALUES (
-    $1, $2, $3, $4, NOW()
+    $1, $2, $3, $4, $5
 ) RETURNING id, source, author, title, description, publishedat
 `
 
@@ -27,6 +27,7 @@ type CreateNewsParams struct {
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
+	Publishedat sql.NullTime
 }
 
 func (q *Queries) CreateNews(ctx context.Context, arg CreateNewsParams) (News, error) {
@@ -35,6 +36,7 @@ func (q *Queries) CreateNews(ctx context.Context, arg CreateNewsParams) (News, e
 		arg.Author,
 		arg.Title,
 		arg.Description,
+		arg.Publishedat,
 	)
 	var i News
 	err := row.Scan(

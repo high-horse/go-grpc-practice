@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"grpc-1/fetcher"
+	"grpc-1/util/fetcher"
 	proto "grpc-1/pb"
 	"log"
 )

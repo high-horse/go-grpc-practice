@@ -6,7 +6,7 @@ INSERT INTO news (
     description,
     publishedAt
 ) VALUES (
-    $1, $2, $3, $4, NOW()
+    $1, $2, $3, $4, $5
 ) RETURNING *;
 
 
