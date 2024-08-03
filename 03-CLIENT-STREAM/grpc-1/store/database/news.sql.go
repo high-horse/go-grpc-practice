@@ -79,13 +79,13 @@ func (q *Queries) GetSingleNews(ctx context.Context, id int64) (GetSingleNewsRow
 	return i, err
 }
 
-const getSourceBasedNews = `-- name: GetSourceBasedNews :many
+const getSourceNews = `-- name: GetSourceNews :many
 SELECT n.id, n.source, n.author, n.title, n.description, n.publishedat, S.source_name FROM news N
 INNER JOIN source S ON S.id = N.source
 WHERE N.source = $1
 `
 
-type GetSourceBasedNewsRow struct {
+type GetSourceNewsRow struct {
 	ID          int64
 	Source      string
 	Author      sql.NullString
@@ -95,15 +95,15 @@ type GetSourceBasedNewsRow struct {
 	SourceName  string
 }
 
-func (q *Queries) GetSourceBasedNews(ctx context.Context, source string) ([]GetSourceBasedNewsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSourceBasedNews, source)
+func (q *Queries) GetSourceNews(ctx context.Context, source string) ([]GetSourceNewsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSourceNews, source)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetSourceBasedNewsRow
+	var items []GetSourceNewsRow
 	for rows.Next() {
-		var i GetSourceBasedNewsRow
+		var i GetSourceNewsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Source,
