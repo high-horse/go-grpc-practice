@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	sqlc "grpc-1/store/database"
+
 	_ "github.com/lib/pq" // Import the PostgreSQL driver
 )
 
@@ -28,7 +29,7 @@ func LoadConfig() Config {
 		Port:     getEnvInt("DB_PORT", 5432),
 		User:     getEnv("DB_USER", "postgres"),
 		Password: getEnv("DB_PASSWORD", "root"),
-		DBName:   getEnv("DB_NAME", "fiber"),
+		DBName:   getEnv("DB_NAME", "attempt2"),
 		SSLMode:  getEnv("DB_SSLMODE", "disable"),
 	}
 }

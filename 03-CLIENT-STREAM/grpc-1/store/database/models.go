@@ -18,7 +18,7 @@ type News struct {
 }
 
 type Source struct {
-	ID         string
+	ID         int64
 	SourceID   string
 	SourceName string
 }

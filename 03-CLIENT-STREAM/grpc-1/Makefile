@@ -13,7 +13,7 @@ server:
 	cd server && go run .
 
 # Run the client
-client: 
+client:
 	cd client-dummy && go run .
 
 # Install sqlc and goose tools
@@ -21,14 +21,14 @@ sqlc-i:
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 
-	
+
 # Run Goose migrations up
 goose-up:
-	cd store/schema && goose  postgres "postgres://postgres:root@localhost:5432/fiber" up
+	cd store/schema && goose  postgres "postgres://postgres:root@localhost:5432/attempt2" up
 
 # Run Goose migrations down
 goose-down:
-	cd store/schema && goose  postgres "postgres://postgres:root@localhost:5432/fiber" down
+	cd store/schema && goose  postgres "postgres://postgres:root@localhost:5432/attempt2" down
 
 # Generate code from SQL queries using sqlc
 sqlc:

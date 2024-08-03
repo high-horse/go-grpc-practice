@@ -35,7 +35,7 @@ const getSourceById = `-- name: GetSourceById :one
 SELECT id, source_id, source_name FROM source where id = $1 LIMIT 1
 `
 
-func (q *Queries) GetSourceById(ctx context.Context, id string) (Source, error) {
+func (q *Queries) GetSourceById(ctx context.Context, id int64) (Source, error) {
 	row := q.db.QueryRowContext(ctx, getSourceById, id)
 	var i Source
 	err := row.Scan(&i.ID, &i.SourceID, &i.SourceName)
