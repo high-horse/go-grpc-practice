@@ -16,7 +16,9 @@ INSERT INTO source
     source_name
 ) VALUES (
     $1, $2
-) RETURNING id, source_id, source_name
+) ON CONFLICT (source_id) DO UPDATE
+    SET source_name = EXCLUDED.source_name
+RETURNING id, source_id, source_name
 `
 
 type CreateSourceParams struct {

@@ -6,8 +6,13 @@ INSERT INTO news (
     description,
     publishedAt
 ) VALUES (
-    $1, $2, $3, $4, $5
-) RETURNING *;
+    (SELECT source_id FROM source WHERE source_id = $1),
+    $2, $3, $4, $5
+) ON CONFLICT (title) DO UPDATE
+    SET author = EXCLUDED.author,
+        description = EXCLUDED.description,
+        publishedAt = EXCLUDED.publishedAt
+RETURNING *;
 
 
 -- name: GetSingleNews :one

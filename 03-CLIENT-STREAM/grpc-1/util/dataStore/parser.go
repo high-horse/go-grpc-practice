@@ -14,7 +14,7 @@ func ArticleToDBData(article fetcher.Article ) (database.CreateSourceParams, dat
 	}
 	
 	news := database.CreateNewsParams{
-		Source: source.SourceID,
+		SourceID: source.SourceID,
 		Author: StringToNullString(article.Author),
 		Title: StringToNullString(article.Title),
 		Description: StringToNullString(article.Description),

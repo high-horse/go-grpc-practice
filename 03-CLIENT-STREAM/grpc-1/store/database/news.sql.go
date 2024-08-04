@@ -18,12 +18,17 @@ INSERT INTO news (
     description,
     publishedAt
 ) VALUES (
-    $1, $2, $3, $4, $5
-) RETURNING id, source, author, title, description, publishedat
+    (SELECT source_id FROM source WHERE source_id = $1),
+    $2, $3, $4, $5
+) ON CONFLICT (title) DO UPDATE
+    SET author = EXCLUDED.author,
+        description = EXCLUDED.description,
+        publishedAt = EXCLUDED.publishedAt
+RETURNING id, source, author, title, description, publishedat
 `
 
 type CreateNewsParams struct {
-	Source      string
+	SourceID    string
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
@@ -32,7 +37,7 @@ type CreateNewsParams struct {
 
 func (q *Queries) CreateNews(ctx context.Context, arg CreateNewsParams) (News, error) {
 	row := q.db.QueryRowContext(ctx, createNews,
-		arg.Source,
+		arg.SourceID,
 		arg.Author,
 		arg.Title,
 		arg.Description,

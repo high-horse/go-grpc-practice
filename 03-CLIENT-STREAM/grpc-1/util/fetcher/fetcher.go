@@ -29,6 +29,23 @@ func FetchNews(country string) ([]Article, error) {
 	return newsResponse.Articles, nil
 }
 
+func FetchNewsTest(country string) ([]Article, error) {
+	var articles []Article
+	a := Article{
+		Source: Source{
+                ID: "the-washington-post",
+                Name: "The Washington Post",
+            },
+            Author: "Jo-Ann Finkelstein",
+            Title: "Perspective | Gross and embarrassing — teen girls’ misconceptions about their periods - The Washington Post",
+            Description: "Parents can help dispel confusion and misinformation and alleviate the anxiety and shame some girls may feel about menstruation.",
+            PublishedAt: "2024-08-03T12:42:16Z",
+	}
+	articles = append(articles, a)
+	
+	return articles, nil
+}
+
 func Check(err error) {
 	if err != nil {
 		log.Fatalf("Error Encountered : ", err)

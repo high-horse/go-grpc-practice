@@ -46,6 +46,9 @@ func (s *Server) GetNewsBulk(ctx context.Context, req *proto.NewsRequest) (*prot
 	resp := &proto.BulkNews{}
 
 	fetchedArticles, err := fetcher.FetchNews("en")
+	// fetchedArticles, err := fetcher.FetchNewsTest("en")
+	
+	
 	if err != nil {
 		return nil, err
 	}
