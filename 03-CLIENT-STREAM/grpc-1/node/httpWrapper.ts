@@ -42,6 +42,7 @@ const STATUS_CODES = {
     INTERNAL_SERVER_ERROR: 500,
 };
 
+/* GRPC SERVER CALLS START */
 function getNewsBulk(): Promise<NewsResponse> {
     return new Promise((resolve, reject) => {
         const request = {};
@@ -67,6 +68,7 @@ function GetFreshNews() :Promise<NewsResponse> {
     })
   })
 }
+
 function getDBNews() :Promise<NewsResponse> {
   return new  Promise((resolve, reject) => {
     const request = {};
@@ -79,16 +81,25 @@ function getDBNews() :Promise<NewsResponse> {
     })
   })
 }
+/* GRPC SERVER CALLS ENDS */
 
-const server = http.createServer(async (req, res) => {
+/*HTTP MIDDLEWARE STARTS */
+const logHttp = (req: http.IncomingMessage, res: http.ServerResponse, newt :() => void) => {
+  const { method, url } = req;
+  console.log(`[${new Date().toISOString()}] ${method} ${url}`);
+  newt();
+}
+/*HTTP MIDDLEWARE ENDS */
+
+const requestHandler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
-      res.writeHead(204);
-      res.end();
-      return;
+    res.writeHead(STATUS_CODES.NO_CONTENT);
+    res.end();
+    return;
   }
 
   try { 
@@ -109,8 +120,16 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(STATUS_CODES.INTERNAL_SERVER_ERROR, { 'Content-type': 'application/json' });
     res.end(JSON.stringify({ error: "Internal Server Error" }));
   }
-});
+};
+const server = http.createServer((req, res) => {
+  logHttp(req, res, () => {
+    requestHandler(req, res);
+  })
+})
 
 server.listen(HTTP_PORT, () => {
-    console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
+  console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
+  console.log("/fresh-news      -> Fetch Fresh News");
+  console.log("/db-news         -> Fetch News from DB");
+  
 });

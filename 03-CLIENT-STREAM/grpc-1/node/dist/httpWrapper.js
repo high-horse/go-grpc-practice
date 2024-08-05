@@ -54,6 +54,7 @@ const STATUS_CODES = {
     NOT_FOUND: 404,
     INTERNAL_SERVER_ERROR: 500,
 };
+/* GRPC SERVER CALLS START */
 function getNewsBulk() {
     return new Promise((resolve, reject) => {
         const request = {};
@@ -90,12 +91,20 @@ function getDBNews() {
         });
     });
 }
-const server = http.createServer((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+/* GRPC SERVER CALLS ENDS */
+/*HTTP MIDDLEWARE STARTS */
+const logHttp = (req, res, newt) => {
+    const { method, url } = req;
+    console.log(`[${new Date().toISOString()}] ${method} ${url}`);
+    newt();
+};
+/*HTTP MIDDLEWARE ENDS */
+const requestHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'OPTIONS') {
-        res.writeHead(204);
+        res.writeHead(STATUS_CODES.NO_CONTENT);
         res.end();
         return;
     }
@@ -120,8 +129,15 @@ const server = http.createServer((req, res) => __awaiter(void 0, void 0, void 0,
         res.writeHead(STATUS_CODES.INTERNAL_SERVER_ERROR, { 'Content-type': 'application/json' });
         res.end(JSON.stringify({ error: "Internal Server Error" }));
     }
-}));
+});
+const server = http.createServer((req, res) => {
+    logHttp(req, res, () => {
+        requestHandler(req, res);
+    });
+});
 server.listen(HTTP_PORT, () => {
     console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
+    console.log("/fresh-news      -> Fetch Fresh News");
+    console.log("/db-news         -> Fetch News from DB");
 });
 //# sourceMappingURL=httpWrapper.js.map

@@ -1,6 +1,6 @@
 .PHONY: compile run test http
 
-compile :
+transpile :
 	npx tsc
 
 run:
