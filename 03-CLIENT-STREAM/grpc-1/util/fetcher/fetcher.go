@@ -40,6 +40,7 @@ func FetchNewsTest(country string) ([]Article, error) {
             Title: "Perspective | Gross and embarrassing — teen girls’ misconceptions about their periods - The Washington Post",
             Description: "Parents can help dispel confusion and misinformation and alleviate the anxiety and shame some girls may feel about menstruation.",
             PublishedAt: "2024-08-03T12:42:16Z",
+            URL: "ssss",
 	}
 	articles = append(articles, a)
 	

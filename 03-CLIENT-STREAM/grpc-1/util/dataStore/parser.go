@@ -18,6 +18,7 @@ func ArticleToDBData(article fetcher.Article ) (database.CreateSourceParams, dat
 		Author: StringToNullString(article.Author),
 		Title: StringToNullString(article.Title),
 		Description: StringToNullString(article.Description),
+		Url: StringToNullString(article.URL),
 		Publishedat: StringToNullTime(article.PublishedAt),
 	}
 	return source, news
@@ -35,7 +36,7 @@ func DBNewsToArticle(dbDews []database.GetAllNewsRow) []fetcher.Article {
 			Author: NullStringToString(news.Author),
 			Title: NullStringToString(news.Title),
 			Description: NullStringToString(news.Description),
-			URL: "",
+			URL: NullStringToString(news.Url),
 			PublishedAt: NullTimeToString(news.Publishedat),
 		})
 	}

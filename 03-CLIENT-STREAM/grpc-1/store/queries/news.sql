@@ -4,13 +4,15 @@ INSERT INTO news (
     author,
     title,
     description,
+    url,
     publishedAt
 ) VALUES (
     (SELECT source_id FROM source WHERE source_id = $1),
-    $2, $3, $4, $5
+    $2, $3, $4, $5, $6
 ) ON CONFLICT (title) DO UPDATE
     SET author = EXCLUDED.author,
         description = EXCLUDED.description,
+        url = EXCLUDED.url,
         publishedAt = EXCLUDED.publishedAt
 RETURNING *;
 

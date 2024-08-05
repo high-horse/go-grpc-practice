@@ -14,6 +14,7 @@ type News struct {
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
+	Url         sql.NullString
 	Publishedat sql.NullTime
 }
 

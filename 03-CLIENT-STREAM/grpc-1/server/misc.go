@@ -26,6 +26,7 @@ func ArticleToNews(article fetcher.Article) *proto.News {
 		Author: article.Author,
 		Title: article.Title,
 		Description: article.Description,
+		Url: article.URL,
 		PublishedAt: article.PublishedAt,
 	}
 }

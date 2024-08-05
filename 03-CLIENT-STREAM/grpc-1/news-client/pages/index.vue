@@ -16,7 +16,10 @@
             />
         </div>
         <div class="w-full md:w-8/12">
-            <MenuDetailComponent :selectedNews="selectedNews" />
+            <MenuDetailComponent
+                :selectedNews="selectedNews"
+                @newNewsItem="handlenewNews"
+            />
         </div>
     </div>
 </template>
@@ -25,13 +28,9 @@
 import { ref, watchEffect, onMounted } from "vue";
 import type { NewsItem } from "~/types";
 
-let endpoint = ref("news");
+let endpoint = ref("db-news");
 
-const { news, error, isLoading, fetchNews } = useGetNews(
-    endpoint,
-    "GET",
-    null,
-);
+const { news, error, isLoading, fetchNews } = useGetNews(endpoint, "GET", null);
 const selectedNews = ref<NewsItem | null>(null);
 
 watchEffect(() => {
@@ -48,7 +47,7 @@ const clickedCategory = async (key: string) => {
         console.log(`Category clicked: ${key}`);
         selectedNews.value = null;
         endpoint.value = key;
-        console.log("endpoint :",endpoint.value);
+        console.log("endpoint :", endpoint.value);
         await fetchNews(); // Trigger fetching news only when a category is clicked
     } catch (e) {
         console.error("Failed to fetch news:", e);
@@ -82,6 +81,19 @@ const generateNewContent = () => {
 
     // Set the selected news to the new "UNTITLED" item
     selectedNews.value = untitledNews;
+};
+
+const handlenewNews = (newNews: NewsItem) => {
+    // const untitledNews: NewsItem = {
+    //     source: { id: "", name: "" },
+    //     author: "",
+    //     title: "UNTITLED",
+    //     description: "",
+    //     publishedAt: "",
+    // };
+    news.value = [newNews];
+    console.log("created new news :", newNews);
+    // selectedNews.value = newNews;
 };
 
 onMounted(() => {

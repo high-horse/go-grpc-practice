@@ -18,7 +18,8 @@ message News{
     string author = 2;
     string title = 3;
     string description = 4;
-    string publishedAt = 5;
+    string url = 5;
+    string publishedAt = 6;
 }
 
 message BulkNews {

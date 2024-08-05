@@ -16,15 +16,17 @@ INSERT INTO news (
     author,
     title,
     description,
+    url,
     publishedAt
 ) VALUES (
     (SELECT source_id FROM source WHERE source_id = $1),
-    $2, $3, $4, $5
+    $2, $3, $4, $5, $6
 ) ON CONFLICT (title) DO UPDATE
     SET author = EXCLUDED.author,
         description = EXCLUDED.description,
+        url = EXCLUDED.url,
         publishedAt = EXCLUDED.publishedAt
-RETURNING id, source, author, title, description, publishedat
+RETURNING id, source, author, title, description, url, publishedat
 `
 
 type CreateNewsParams struct {
@@ -32,6 +34,7 @@ type CreateNewsParams struct {
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
+	Url         sql.NullString
 	Publishedat sql.NullTime
 }
 
@@ -41,6 +44,7 @@ func (q *Queries) CreateNews(ctx context.Context, arg CreateNewsParams) (News, e
 		arg.Author,
 		arg.Title,
 		arg.Description,
+		arg.Url,
 		arg.Publishedat,
 	)
 	var i News
@@ -50,13 +54,14 @@ func (q *Queries) CreateNews(ctx context.Context, arg CreateNewsParams) (News, e
 		&i.Author,
 		&i.Title,
 		&i.Description,
+		&i.Url,
 		&i.Publishedat,
 	)
 	return i, err
 }
 
 const getAllNews = `-- name: GetAllNews :many
-SELECT n.id, n.source, n.author, n.title, n.description, n.publishedat, S.source_name FROM news N
+SELECT n.id, n.source, n.author, n.title, n.description, n.url, n.publishedat, S.source_name FROM news N
 INNER JOIN source S ON S.source_id = N.source
 `
 
@@ -66,6 +71,7 @@ type GetAllNewsRow struct {
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
+	Url         sql.NullString
 	Publishedat sql.NullTime
 	SourceName  string
 }
@@ -85,6 +91,7 @@ func (q *Queries) GetAllNews(ctx context.Context) ([]GetAllNewsRow, error) {
 			&i.Author,
 			&i.Title,
 			&i.Description,
+			&i.Url,
 			&i.Publishedat,
 			&i.SourceName,
 		); err != nil {
@@ -102,7 +109,7 @@ func (q *Queries) GetAllNews(ctx context.Context) ([]GetAllNewsRow, error) {
 }
 
 const getSingleNews = `-- name: GetSingleNews :one
-SELECT n.id, n.source, n.author, n.title, n.description, n.publishedat, S.source_name FROM news N
+SELECT n.id, n.source, n.author, n.title, n.description, n.url, n.publishedat, S.source_name FROM news N
 INNER JOIN source S ON S.id = N.source
 WHERE N.id = $1 LIMIT 1
 `
@@ -113,6 +120,7 @@ type GetSingleNewsRow struct {
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
+	Url         sql.NullString
 	Publishedat sql.NullTime
 	SourceName  string
 }
@@ -126,6 +134,7 @@ func (q *Queries) GetSingleNews(ctx context.Context, id int64) (GetSingleNewsRow
 		&i.Author,
 		&i.Title,
 		&i.Description,
+		&i.Url,
 		&i.Publishedat,
 		&i.SourceName,
 	)
@@ -133,7 +142,7 @@ func (q *Queries) GetSingleNews(ctx context.Context, id int64) (GetSingleNewsRow
 }
 
 const getSourceBasedNews = `-- name: GetSourceBasedNews :many
-SELECT n.id, n.source, n.author, n.title, n.description, n.publishedat, S.source_name FROM news N
+SELECT n.id, n.source, n.author, n.title, n.description, n.url, n.publishedat, S.source_name FROM news N
 INNER JOIN source S ON S.id = N.source
 WHERE N.source = $1
 `
@@ -144,6 +153,7 @@ type GetSourceBasedNewsRow struct {
 	Author      sql.NullString
 	Title       sql.NullString
 	Description sql.NullString
+	Url         sql.NullString
 	Publishedat sql.NullTime
 	SourceName  string
 }
@@ -163,6 +173,7 @@ func (q *Queries) GetSourceBasedNews(ctx context.Context, source string) ([]GetS
 			&i.Author,
 			&i.Title,
 			&i.Description,
+			&i.Url,
 			&i.Publishedat,
 			&i.SourceName,
 		); err != nil {

@@ -1,7 +1,7 @@
 <template>
     <div class="news-details" v-if="selectedNews" >
         <div v-if="selectedNews.title == 'UNTITLED'">
-            <MenuDetailsNewDetailComponent />
+            <MenuDetailsNewDetailComponent  @submit-newnews="sendNewNews" />
         </div>
         <div v-else>
             <MenuDetailsShowDetailComponent  :selectedNews="selectedNews" />    
@@ -19,6 +19,13 @@
     const props = defineProps<{
         selectedNews: NewsItem | null;
     }>()
+    const emit = defineEmits<{
+      (event: 'newNewsItem', newsitem: NewsItem): void;
+    }>()
+    
+    const sendNewNews = (newNews : NewsItem) => {
+      emit('newNewsItem', newNews);
+    }
 
 </script>
 

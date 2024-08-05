@@ -76,9 +76,9 @@ const formData = ref<NewsItem >({
   publishedAt: '',
 });
 
-// const emits = defineEmits<{
-//   (event: 'submit-newnews', submitData: NewsItem): void;
-// }>();
+const emits = defineEmits<{
+  (event: 'submit-newnews', submitData: NewsItem): void;
+}>();
 
 const discardNews = () => {
   formData.value = {
@@ -91,6 +91,7 @@ const discardNews = () => {
 }
 const handleSubmit = () => {
   console.log("FORMDATA", formData.value);
+  emits('submit-newnews', formData.value)
 }
 </script>
 

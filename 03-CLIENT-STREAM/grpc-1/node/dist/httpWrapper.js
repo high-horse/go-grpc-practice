@@ -99,6 +99,7 @@ const logHttp = (req, res, newt) => {
     newt();
 };
 /*HTTP MIDDLEWARE ENDS */
+/* HTTP HANDLERS START */
 const requestHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');

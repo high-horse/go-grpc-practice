@@ -28,6 +28,7 @@ interface NewsItem {
     author: string;
     title: string;
     description: string;
+  url: string;
     publishedAt: string;
 }
 
