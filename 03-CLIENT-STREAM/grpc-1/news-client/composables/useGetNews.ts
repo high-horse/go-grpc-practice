@@ -2,12 +2,12 @@ import type { UseFetchOptions } from "#app";
 import type { NewsItem, NewsResponse } from '../types';
 
 export const useGetNews = (
-  endpoint: string,
+  endpoint: Ref<string>,
   method: string = 'GET',
   payload: any = null
 ) => {
   const BASE_URL = "http://localhost:8000/";
-  const url = BASE_URL + endpoint;
+  const url = BASE_URL + endpoint.value;
 
   const news: Ref<NewsItem[] | null> = ref(null);
   const error: Ref<Error | null> = ref(null);

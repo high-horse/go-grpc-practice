@@ -91,6 +91,7 @@ const logHttp = (req: http.IncomingMessage, res: http.ServerResponse, newt :() =
 }
 /*HTTP MIDDLEWARE ENDS */
 
+/* HTTP HANDLERS START */
 const requestHandler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -121,6 +122,7 @@ const requestHandler = async (req: http.IncomingMessage, res: http.ServerRespons
     res.end(JSON.stringify({ error: "Internal Server Error" }));
   }
 };
+
 const server = http.createServer((req, res) => {
   logHttp(req, res, () => {
     requestHandler(req, res);

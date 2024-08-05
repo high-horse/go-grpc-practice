@@ -26,8 +26,8 @@ const emit = defineEmits<{
 }>();
 
 const options = {
-    "get_recent_news": "Recent News",
-    "fetch_new_news" : "Fetch New News",
+    "fresh-news": "Recent News",
+    "db-news" : "Fetch DB News",
     "get_created_news" : "Get Created News",
     "create_news":"Create News",
 };
