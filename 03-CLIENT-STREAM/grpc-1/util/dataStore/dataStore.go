@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"context"
+	"fmt"
 	// "fmt"
 	db "grpc-1/database"
 	"grpc-1/util/fetcher"
@@ -13,13 +14,7 @@ import (
 func SaveNewsDB(fetchedArticle []fetcher.Article) error {
 
 	for _, article := range fetchedArticle {
-		// continue
-		
 		source, news := ArticleToDBData(article)
-
-		// fmt.Println(source)
-		// fmt.Println(news)
-		// continue
 		_, err := db.Queries.CreateSource(context.Background(), source)
 		if err != nil {
 			log.Printf("Source DB err :%v", err)
@@ -31,4 +26,12 @@ func SaveNewsDB(fetchedArticle []fetcher.Article) error {
 		}
 	}
 	return nil
+}
+
+func GetDBNews() ([]fetcher.Article, error) {
+	newsDB, err  := db.Queries.GetAllNews(context.Background())
+	if err != nil{
+		return nil, fmt.Errorf("GetDBNews : %v",err)
+	}
+	return DBNewsToArticle(newsDB), nil
 }

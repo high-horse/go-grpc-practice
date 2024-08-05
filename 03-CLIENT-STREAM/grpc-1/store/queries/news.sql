@@ -24,3 +24,7 @@ WHERE N.id = $1 LIMIT 1;
 SELECT N.*, S.source_name FROM news N
 INNER JOIN source S ON S.id = N.source
 WHERE N.source = $1;
+
+-- name: GetAllNews :many
+SELECT N.*, S.source_name FROM news N
+INNER JOIN source S ON S.source_id = N.source ;

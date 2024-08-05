@@ -55,6 +55,52 @@ func (q *Queries) CreateNews(ctx context.Context, arg CreateNewsParams) (News, e
 	return i, err
 }
 
+const getAllNews = `-- name: GetAllNews :many
+SELECT n.id, n.source, n.author, n.title, n.description, n.publishedat, S.source_name FROM news N
+INNER JOIN source S ON S.source_id = N.source
+`
+
+type GetAllNewsRow struct {
+	ID          int64
+	Source      string
+	Author      sql.NullString
+	Title       sql.NullString
+	Description sql.NullString
+	Publishedat sql.NullTime
+	SourceName  string
+}
+
+func (q *Queries) GetAllNews(ctx context.Context) ([]GetAllNewsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAllNews)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllNewsRow
+	for rows.Next() {
+		var i GetAllNewsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Source,
+			&i.Author,
+			&i.Title,
+			&i.Description,
+			&i.Publishedat,
+			&i.SourceName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSingleNews = `-- name: GetSingleNews :one
 SELECT n.id, n.source, n.author, n.title, n.description, n.publishedat, S.source_name FROM news N
 INNER JOIN source S ON S.id = N.source

@@ -23,6 +23,26 @@ func ArticleToDBData(article fetcher.Article ) (database.CreateSourceParams, dat
 	return source, news
 }
 
+func DBNewsToArticle(dbDews []database.GetAllNewsRow) []fetcher.Article {
+	articles := []fetcher.Article{}
+	
+	for _, news := range dbDews {
+		articles = append(articles, fetcher.Article{
+			Source: fetcher.Source{
+				ID: news.Source,
+				Name: news.SourceName,
+			},
+			Author: NullStringToString(news.Author),
+			Title: NullStringToString(news.Title),
+			Description: NullStringToString(news.Description),
+			URL: "",
+			PublishedAt: NullTimeToString(news.Publishedat),
+		})
+	}
+	
+	return articles
+}
+
 func StringToNullString(s string) sql.NullString {
 	if s == "" {
 		return sql.NullString{Valid: false}
@@ -31,6 +51,13 @@ func StringToNullString(s string) sql.NullString {
 		String: s,
 		Valid:  true,
 	}
+}
+
+func NullStringToString(ns sql.NullString) string {
+	if ns.Valid{
+		return ns.String
+	}
+	return ""
 }
 
 func StringToNullTime(s string) sql.NullTime {
@@ -46,3 +73,11 @@ func StringToNullTime(s string) sql.NullTime {
         Valid: true,
     }
 }
+
+func NullTimeToString(nt sql.NullTime) string {
+	if nt.Valid {
+		return nt.Time.Format(time.RFC3339)
+	}
+	return ""
+}
+

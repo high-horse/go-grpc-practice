@@ -63,3 +63,38 @@ func (s *Server) GetNewsBulk(ctx context.Context, req *proto.NewsRequest) (*prot
 
 	return resp, nil
 }
+
+
+func (s *Server) GetFreshNews(ctx context.Context, req *proto.NewsRequest) (*proto.BulkNews, error) {
+	resp := &proto.BulkNews{}
+
+	fetchedArticles, err := fetcher.FetchNews("en")	
+	
+	if err != nil {
+		return nil, err
+	}
+	go datastore.SaveNewsDB(fetchedArticles)
+	var newslist  []*proto.News
+	for _, article := range fetchedArticles{
+		// log.Printf("data-fetched: ",article)
+		// println("")
+		newslist = append(newslist, ArticleToNews(article))
+	}
+	resp.News = newslist
+
+	return resp, nil
+}
+
+func (s *Server) GetDBNews(ctx context.Context, req *proto.NewsRequest) (*proto.BulkNews, error) {
+	resp := &proto.BulkNews{}
+	dbArticle, err := datastore.GetDBNews()
+	if err != nil {
+		return nil, err
+	}
+	var newslist []*proto.News
+	for _, article := range dbArticle {
+		newslist = append(newslist, ArticleToNews(article))
+	}
+	resp.News = newslist
+	return resp, nil
+}

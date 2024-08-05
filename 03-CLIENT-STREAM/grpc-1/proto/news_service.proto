@@ -9,4 +9,6 @@ import "news_models.proto";
 service Newservice {
     rpc GetNewsStream(NewsRequest) returns (stream News) {};
     rpc GetNewsBulk(NewsRequest) returns (BulkNews) {};
+    rpc GetFreshNews(NewsRequest) returns (BulkNews) {};
+    rpc GetDBNews(NewsRequest) returns (BulkNews){};
 }
