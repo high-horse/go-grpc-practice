@@ -35,6 +35,13 @@ interface NewsResponse {
     news: NewsItem[];
 }
 
+const STATUS_CODES = {
+    OK: 200,
+    NO_CONTENT: 204,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500,
+};
+
 function getNewsBulk(): Promise<NewsResponse> {
     return new Promise((resolve, reject) => {
         const request = {};
@@ -48,48 +55,60 @@ function getNewsBulk(): Promise<NewsResponse> {
     });
 }
 
-const server = http.createServer(async (req, res) => {
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    
-
-    const allowedOrigins = ['http://localhost:3000'];
-    const origin = req.headers.origin as string;
-
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    }
-
-    if (req.method === 'OPTIONS') {
-        res.writeHead(204);
-        res.end();
+function GetFreshNews() :Promise<NewsResponse> {
+  return new  Promise((resolve, reject) => {
+    const request = {};
+    client.GetFreshNews(request, (error: grpc.ServiceError | null, response: NewsResponse) => {
+      if (error ) {
+        reject(error);
         return;
-    }
+      }
+      resolve(response);
+    })
+  })
+}
+function getDBNews() :Promise<NewsResponse> {
+  return new  Promise((resolve, reject) => {
+    const request = {};
+    client.GetDBNews(request, (error: grpc.ServiceError | null, response: NewsResponse) => {
+      if (error ) {
+        reject(error);
+        return;
+      }
+      resolve(response);
+    })
+  })
+}
 
-    if (req.url === '/news' && req.method === 'GET') {
-        try {
-            const newsResponse = await getNewsBulk();
-            // for (let index = 0; index < newsResponse.news.length; index++) {
-            //     const element = newsResponse.news[index];
-            //     console.log(`News Item ${index}:`, element);
-            //     if (!element.description) {
-            //         console.warn(`News Item ${index} has an empty description`);
-            //     }
-            // }
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(newsResponse));
-        } catch (error) {
-            console.error("Error:", error);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Internal Server Error' }));
-        }
+const server = http.createServer(async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+  }
+
+  try { 
+    let newsResponse: NewsResponse | null = null;
+    if (req.url === "/fresh-news" && req.method === "GET") {
+      newsResponse = await GetFreshNews();
+    } else if (req.url === "/db-news" && req.method === "GET") {
+      newsResponse = await getDBNews();
     } else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Not Found' }));
+      res.writeHead(STATUS_CODES.NOT_FOUND, { 'Content-type': 'application/json' });
+      res.end(JSON.stringify({ error: "Not Found" }));
+      return;
     }
+    res.writeHead(STATUS_CODES.OK, { 'Content-type': 'application/json' });
+    res.end(JSON.stringify(newsResponse))
+  } catch(error) {
+    console.log("error:", error);
+    res.writeHead(STATUS_CODES.INTERNAL_SERVER_ERROR, { 'Content-type': 'application/json' });
+    res.end(JSON.stringify({ error: "Internal Server Error" }));
+  }
 });
 
 server.listen(HTTP_PORT, () => {

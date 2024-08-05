@@ -48,6 +48,12 @@ const packageDefinition = protoLoader.loadSync(protoFiles, {
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const newsProto = protoDescriptor.news;
 const client = new newsProto.Newservice(SERVER, grpc.credentials.createInsecure());
+const STATUS_CODES = {
+    OK: 200,
+    NO_CONTENT: 204,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500,
+};
 function getNewsBulk() {
     return new Promise((resolve, reject) => {
         const request = {};
@@ -60,44 +66,59 @@ function getNewsBulk() {
         });
     });
 }
+function GetFreshNews() {
+    return new Promise((resolve, reject) => {
+        const request = {};
+        client.GetFreshNews(request, (error, response) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve(response);
+        });
+    });
+}
+function getDBNews() {
+    return new Promise((resolve, reject) => {
+        const request = {};
+        client.GetDBNews(request, (error, response) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve(response);
+        });
+    });
+}
 const server = http.createServer((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    const allowedOrigins = ['http://localhost:3000'];
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    }
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'OPTIONS') {
         res.writeHead(204);
         res.end();
         return;
     }
-    if (req.url === '/news' && req.method === 'GET') {
-        try {
-            const newsResponse = yield getNewsBulk();
-            // for (let index = 0; index < newsResponse.news.length; index++) {
-            //     const element = newsResponse.news[index];
-            //     console.log(`News Item ${index}:`, element);
-            //     if (!element.description) {
-            //         console.warn(`News Item ${index} has an empty description`);
-            //     }
-            // }
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(newsResponse));
+    try {
+        let newsResponse = null;
+        if (req.url === "/fresh-news" && req.method === "GET") {
+            newsResponse = yield GetFreshNews();
         }
-        catch (error) {
-            console.error("Error:", error);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Internal Server Error' }));
+        else if (req.url === "/db-news" && req.method === "GET") {
+            newsResponse = yield getDBNews();
         }
+        else {
+            res.writeHead(STATUS_CODES.NOT_FOUND, { 'Content-type': 'application/json' });
+            res.end(JSON.stringify({ error: "Not Found" }));
+            return;
+        }
+        res.writeHead(STATUS_CODES.OK, { 'Content-type': 'application/json' });
+        res.end(JSON.stringify(newsResponse));
     }
-    else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Not Found' }));
+    catch (error) {
+        console.log("error:", error);
+        res.writeHead(STATUS_CODES.INTERNAL_SERVER_ERROR, { 'Content-type': 'application/json' });
+        res.end(JSON.stringify({ error: "Internal Server Error" }));
     }
 }));
 server.listen(HTTP_PORT, () => {
