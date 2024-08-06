@@ -7,6 +7,7 @@ CREATE TABLE news (
     title VARCHAR(1000) UNIQUE,  -- Title of the news, must be unique if required
     description TEXT,  -- Description of the news
     url VARCHAR(1000),
+    is_created BOOLEAN DEFAULT false,
     publishedAt TIMESTAMPTZ  -- Timestamp when the news was published
 );
 
