@@ -1,13 +1,15 @@
 import type { UseFetchOptions } from "#app";
-import type { NewsItem, NewsResponse } from '../types';
+import { log } from "@grpc/grpc-js/build/src/logging";
+import type { NewsItem, NewsResponse } from "../types";
 
 export const useGetNews = (
   endpoint: Ref<string>,
-  method: string = 'GET',
-  payload: any = null
+  method: string = "GET",
+  payload: any = null,
 ) => {
   const BASE_URL = "http://localhost:8000/";
-  const url = BASE_URL + endpoint.value;
+
+  var url = computed(() => BASE_URL + endpoint.value);
 
   const news: Ref<NewsItem[] | null> = ref(null);
   const error: Ref<Error | null> = ref(null);
@@ -18,16 +20,16 @@ export const useGetNews = (
     error.value = null;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(url.value, {
         method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: payload ? JSON.stringify(payload) : null,
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       const data: NewsResponse = await response.json();
@@ -43,6 +45,6 @@ export const useGetNews = (
     news,
     error,
     isLoading,
-    fetchNews
-  }
+    fetchNews,
+  };
 };

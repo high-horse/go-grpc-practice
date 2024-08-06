@@ -81,7 +81,7 @@ watch(
 
 <style scoped>
 .text-link {
-    color: blue;
+    color: #18e669;;
     font-style: italic;
     text-decoration: underline;
 }
