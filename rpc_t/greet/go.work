@@ -1,0 +1,8 @@
+go 1.23.4
+
+
+use (
+    ./greet_client
+    ./greet_server
+    ./protos
+)

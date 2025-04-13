@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "protos/api";
+
+package protos;
+
+service CalculatorService {
+    rpc Sum(CalculateSumRequest) returns (CalculateSumResponse){};
+}
+
+message CalculateSumRequest {
+    int32 FirstNum = 1;
+    int32 SecondNum = 2;
+}
+
+message CalculateSumResponse {
+    int32 Result = 1; 
+}

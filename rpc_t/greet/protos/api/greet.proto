@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "protos/api";
+
+package api;
+
+
+
+message GreetingName {
+    string first_name = 1;
+    string last_name = 2;
+}
+
+service GreetService {
+    // unary 
+  rpc GreetMessage(MessageRequest) returns (MessageReply) {};
+  
+  // server stream
+  rpc GreetMessageManyServer(GreetMessageManyServerReq) returns (stream GreetMessageManyServerRes) {};
+  
+  // client stream 
+  rpc LongGreetClientStream(stream LongGreetRequest) returns (LongGreetResponse) {} ;
+}
+
+message MessageRequest {
+  GreetingName greeting_name = 1;
+}
+
+message MessageReply {
+  string result = 1;
+}
+
+message GreetMessageManyServerReq {
+    GreetingName greet_name = 1;
+}
+
+message GreetMessageManyServerRes {
+    string result = 1;
+}
+
+message LongGreetRequest {
+    GreetingName greeting = 1;
+}
+
+message LongGreetResponse {
+    string result = 1;
+}

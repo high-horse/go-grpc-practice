@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = "protos/message";
+
+package message;
+
+service MessageService {
+    rpc MessageUnary(MessageUnaryReq) returns (MessageUnaryRes) {} ;
+    rpc MessageServerStream(MessaageServerStreamReq) returns (stream MessageServerStreamRes) {};
+    rpc MessageServerStreamFactor(MessageServiceStreamFactorReq) returns (stream MessageServiceStreamFactorRes) {} ;
+}
+
+message User {
+    string first_name = 1;
+    string last_name =2;
+}
+
+message MessageUnaryReq {
+    User user = 1;
+}
+
+message MessageUnaryRes {
+    string result = 1;
+}
+
+message MessaageServerStreamReq {
+    User user = 1;
+}
+
+message MessageServerStreamRes {
+    string result = 1;
+}
+
+message MessageServiceStreamFactorReq {
+    int32 initial = 1;
+}
+
+message MessageServiceStreamFactorRes {
+    int32 factor = 1;
+}
