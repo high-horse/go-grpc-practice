@@ -65,26 +65,18 @@ func (*GServer) PrimeNumberDecomposition(req *pb.PrimeNumberDecompositionReq, st
 }
 
 func (*GServer) ComputeAverage(stream grpc.ClientStreamingServer[pb.ComputeAverageReq, pb.ComputeAverageRes]) error {
-	nums := make([]int64, 0)
-	
+	var sum float64 = 0
+	var count float64 = 0
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {
-			return stream.SendAndClose(&pb.ComputeAverageRes {Average: calculateAverage(nums)})
+			return stream.SendAndClose(&pb.ComputeAverageRes {Average: (sum/count)})
 		}
 		if err != nil {
 			log.Println("error occured during streaming ")
 			continue
 		}
-		nums = append(nums, req.GetNumber())
+		sum += float64(req.GetNumber())
+		count ++
 	}
-}
-
-func calculateAverage(intArr []int64) float64 {
-	var sum float64 = 0
-	for n := range intArr {
-		sum += float64(n)
-	}
-
-	return sum/float64(len(intArr))
 }
