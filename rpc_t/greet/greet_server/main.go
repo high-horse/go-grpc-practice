@@ -4,8 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
+	"strings"
 	"time"
 
 	"google.golang.org/grpc"
@@ -67,5 +69,22 @@ func (s *GreetServer) GreetMessageManyServer(
 		}
 		time.Sleep(1000 * time.Millisecond)
 	}
+	return nil
+}
+
+func (*GreetServer) LongGreetClientStream(stream grpc.ClientStreamingServer[pb.LongGreetRequest, pb.LongGreetResponse]) error{
+	fmt.Println("Long Greet Client Stream invoked.")
+	res := make([]string, 0)
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return stream.SendAndClose(&pb.LongGreetResponse{Result: strings.Join(res, "\n")})
+		}
+		if err != nil {
+			log.Fatal("error from client stream, ", err)
+		}
+		res = append(res, fmt.Sprintf("hello %s %s", req.GetGreeting().GetFirstName(), req.GetGreeting().GetFirstName()))
+	}
+	
 	return nil
 }

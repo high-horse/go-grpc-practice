@@ -6,6 +6,12 @@ package protos;
 
 service CalculatorService {
     rpc Sum(CalculateSumRequest) returns (CalculateSumResponse){};
+    
+    // server streaming
+    rpc PrimeNumberDecomposition(PrimeNumberDecompositionReq) returns (stream PrimeNumberDecompositionRes) {};
+    
+    // client streaming 
+    rpc ComputeAverage(stream ComputeAverageReq) returns (ComputeAverageRes) {};
 }
 
 message CalculateSumRequest {
@@ -16,3 +22,19 @@ message CalculateSumRequest {
 message CalculateSumResponse {
     int32 Result = 1; 
 }
+
+message PrimeNumberDecompositionReq {
+    int64 number = 1;
+}
+
+message PrimeNumberDecompositionRes {
+    int64 factor = 1;
+}
+
+message ComputeAverageReq {
+    int64 number = 1;
+}
+
+message ComputeAverageRes {
+    double average = 1;
+ }

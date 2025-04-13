@@ -1,14 +1,16 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
-	"context"
+	"time"
 
 	"google.golang.org/grpc"
-	
+
 	pb "protos/calculator/api"
 )
 
@@ -41,4 +43,48 @@ func (s *GServer) Sum(ctx context.Context, in *pb.CalculateSumRequest) (*pb.Calc
 	fmt.Println("result found :", result)
 	
 	return &pb.CalculateSumResponse{ Result: result }, nil
+}
+
+func (*GServer) PrimeNumberDecomposition(req *pb.PrimeNumberDecompositionReq, stream grpc.ServerStreamingServer[pb.PrimeNumberDecompositionRes]) error {
+	log.Println("PrimeNumberDecomposition envoked with  ", req)
+	var k int64 = 2
+	n := req.GetNumber()
+	for n > 1 {
+		if n % k == 0 {
+			log.Println("sending response...", k)
+			if err := stream.Send(&pb.PrimeNumberDecompositionRes{Factor: k}); err != nil {
+				log.Println("error ", err)
+			}
+			n = n/k
+		} else {
+			k = k+1
+		}
+		time.Sleep(time.Second * 1)
+	}	
+	return nil
+}
+
+func (*GServer) ComputeAverage(stream grpc.ClientStreamingServer[pb.ComputeAverageReq, pb.ComputeAverageRes]) error {
+	nums := make([]int64, 0)
+	
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return stream.SendAndClose(&pb.ComputeAverageRes {Average: calculateAverage(nums)})
+		}
+		if err != nil {
+			log.Println("error occured during streaming ")
+			continue
+		}
+		nums = append(nums, req.GetNumber())
+	}
+}
+
+func calculateAverage(intArr []int64) float64 {
+	var sum float64 = 0
+	for n := range intArr {
+		sum += float64(n)
+	}
+
+	return sum/float64(len(intArr))
 }

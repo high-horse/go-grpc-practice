@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CalculatorService_Sum_FullMethodName = "/protos.CalculatorService/Sum"
+	CalculatorService_Sum_FullMethodName                      = "/protos.CalculatorService/Sum"
+	CalculatorService_PrimeNumberDecomposition_FullMethodName = "/protos.CalculatorService/PrimeNumberDecomposition"
+	CalculatorService_ComputeAverage_FullMethodName           = "/protos.CalculatorService/ComputeAverage"
 )
 
 // CalculatorServiceClient is the client API for CalculatorService service.
@@ -27,6 +29,10 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CalculatorServiceClient interface {
 	Sum(ctx context.Context, in *CalculateSumRequest, opts ...grpc.CallOption) (*CalculateSumResponse, error)
+	// server streaming
+	PrimeNumberDecomposition(ctx context.Context, in *PrimeNumberDecompositionReq, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PrimeNumberDecompositionRes], error)
+	// client streaming
+	ComputeAverage(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[ComputeAverageReq, ComputeAverageRes], error)
 }
 
 type calculatorServiceClient struct {
@@ -47,11 +53,47 @@ func (c *calculatorServiceClient) Sum(ctx context.Context, in *CalculateSumReque
 	return out, nil
 }
 
+func (c *calculatorServiceClient) PrimeNumberDecomposition(ctx context.Context, in *PrimeNumberDecompositionReq, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PrimeNumberDecompositionRes], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[0], CalculatorService_PrimeNumberDecomposition_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[PrimeNumberDecompositionReq, PrimeNumberDecompositionRes]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_PrimeNumberDecompositionClient = grpc.ServerStreamingClient[PrimeNumberDecompositionRes]
+
+func (c *calculatorServiceClient) ComputeAverage(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[ComputeAverageReq, ComputeAverageRes], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[1], CalculatorService_ComputeAverage_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ComputeAverageReq, ComputeAverageRes]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_ComputeAverageClient = grpc.ClientStreamingClient[ComputeAverageReq, ComputeAverageRes]
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility.
 type CalculatorServiceServer interface {
 	Sum(context.Context, *CalculateSumRequest) (*CalculateSumResponse, error)
+	// server streaming
+	PrimeNumberDecomposition(*PrimeNumberDecompositionReq, grpc.ServerStreamingServer[PrimeNumberDecompositionRes]) error
+	// client streaming
+	ComputeAverage(grpc.ClientStreamingServer[ComputeAverageReq, ComputeAverageRes]) error
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -64,6 +106,12 @@ type UnimplementedCalculatorServiceServer struct{}
 
 func (UnimplementedCalculatorServiceServer) Sum(context.Context, *CalculateSumRequest) (*CalculateSumResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
+}
+func (UnimplementedCalculatorServiceServer) PrimeNumberDecomposition(*PrimeNumberDecompositionReq, grpc.ServerStreamingServer[PrimeNumberDecompositionRes]) error {
+	return status.Errorf(codes.Unimplemented, "method PrimeNumberDecomposition not implemented")
+}
+func (UnimplementedCalculatorServiceServer) ComputeAverage(grpc.ClientStreamingServer[ComputeAverageReq, ComputeAverageRes]) error {
+	return status.Errorf(codes.Unimplemented, "method ComputeAverage not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 func (UnimplementedCalculatorServiceServer) testEmbeddedByValue()                           {}
@@ -104,6 +152,24 @@ func _CalculatorService_Sum_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CalculatorService_PrimeNumberDecomposition_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(PrimeNumberDecompositionReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CalculatorServiceServer).PrimeNumberDecomposition(m, &grpc.GenericServerStream[PrimeNumberDecompositionReq, PrimeNumberDecompositionRes]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_PrimeNumberDecompositionServer = grpc.ServerStreamingServer[PrimeNumberDecompositionRes]
+
+func _CalculatorService_ComputeAverage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).ComputeAverage(&grpc.GenericServerStream[ComputeAverageReq, ComputeAverageRes]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_ComputeAverageServer = grpc.ClientStreamingServer[ComputeAverageReq, ComputeAverageRes]
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -116,6 +182,17 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CalculatorService_Sum_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "PrimeNumberDecomposition",
+			Handler:       _CalculatorService_PrimeNumberDecomposition_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "ComputeAverage",
+			Handler:       _CalculatorService_ComputeAverage_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "calculator.proto",
 }

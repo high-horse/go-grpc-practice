@@ -117,6 +117,182 @@ func (x *CalculateSumResponse) GetResult() int32 {
 	return 0
 }
 
+type PrimeNumberDecompositionReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Number        int64                  `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PrimeNumberDecompositionReq) Reset() {
+	*x = PrimeNumberDecompositionReq{}
+	mi := &file_calculator_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PrimeNumberDecompositionReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrimeNumberDecompositionReq) ProtoMessage() {}
+
+func (x *PrimeNumberDecompositionReq) ProtoReflect() protoreflect.Message {
+	mi := &file_calculator_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrimeNumberDecompositionReq.ProtoReflect.Descriptor instead.
+func (*PrimeNumberDecompositionReq) Descriptor() ([]byte, []int) {
+	return file_calculator_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *PrimeNumberDecompositionReq) GetNumber() int64 {
+	if x != nil {
+		return x.Number
+	}
+	return 0
+}
+
+type PrimeNumberDecompositionRes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Factor        int64                  `protobuf:"varint,1,opt,name=factor,proto3" json:"factor,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PrimeNumberDecompositionRes) Reset() {
+	*x = PrimeNumberDecompositionRes{}
+	mi := &file_calculator_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PrimeNumberDecompositionRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrimeNumberDecompositionRes) ProtoMessage() {}
+
+func (x *PrimeNumberDecompositionRes) ProtoReflect() protoreflect.Message {
+	mi := &file_calculator_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrimeNumberDecompositionRes.ProtoReflect.Descriptor instead.
+func (*PrimeNumberDecompositionRes) Descriptor() ([]byte, []int) {
+	return file_calculator_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *PrimeNumberDecompositionRes) GetFactor() int64 {
+	if x != nil {
+		return x.Factor
+	}
+	return 0
+}
+
+type ComputeAverageReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Number        int64                  `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ComputeAverageReq) Reset() {
+	*x = ComputeAverageReq{}
+	mi := &file_calculator_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ComputeAverageReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ComputeAverageReq) ProtoMessage() {}
+
+func (x *ComputeAverageReq) ProtoReflect() protoreflect.Message {
+	mi := &file_calculator_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ComputeAverageReq.ProtoReflect.Descriptor instead.
+func (*ComputeAverageReq) Descriptor() ([]byte, []int) {
+	return file_calculator_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ComputeAverageReq) GetNumber() int64 {
+	if x != nil {
+		return x.Number
+	}
+	return 0
+}
+
+type ComputeAverageRes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Average       float64                `protobuf:"fixed64,1,opt,name=average,proto3" json:"average,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ComputeAverageRes) Reset() {
+	*x = ComputeAverageRes{}
+	mi := &file_calculator_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ComputeAverageRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ComputeAverageRes) ProtoMessage() {}
+
+func (x *ComputeAverageRes) ProtoReflect() protoreflect.Message {
+	mi := &file_calculator_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ComputeAverageRes.ProtoReflect.Descriptor instead.
+func (*ComputeAverageRes) Descriptor() ([]byte, []int) {
+	return file_calculator_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ComputeAverageRes) GetAverage() float64 {
+	if x != nil {
+		return x.Average
+	}
+	return 0
+}
+
 var File_calculator_proto protoreflect.FileDescriptor
 
 const file_calculator_proto_rawDesc = "" +
@@ -126,9 +302,19 @@ const file_calculator_proto_rawDesc = "" +
 	"\bFirstNum\x18\x01 \x01(\x05R\bFirstNum\x12\x1c\n" +
 	"\tSecondNum\x18\x02 \x01(\x05R\tSecondNum\".\n" +
 	"\x14CalculateSumResponse\x12\x16\n" +
-	"\x06Result\x18\x01 \x01(\x05R\x06Result2W\n" +
+	"\x06Result\x18\x01 \x01(\x05R\x06Result\"5\n" +
+	"\x1bPrimeNumberDecompositionReq\x12\x16\n" +
+	"\x06number\x18\x01 \x01(\x03R\x06number\"5\n" +
+	"\x1bPrimeNumberDecompositionRes\x12\x16\n" +
+	"\x06factor\x18\x01 \x01(\x03R\x06factor\"+\n" +
+	"\x11ComputeAverageReq\x12\x16\n" +
+	"\x06number\x18\x01 \x01(\x03R\x06number\"-\n" +
+	"\x11ComputeAverageRes\x12\x18\n" +
+	"\aaverage\x18\x01 \x01(\x01R\aaverage2\x8d\x02\n" +
 	"\x11CalculatorService\x12B\n" +
-	"\x03Sum\x12\x1b.protos.CalculateSumRequest\x1a\x1c.protos.CalculateSumResponse\"\x00B\fZ\n" +
+	"\x03Sum\x12\x1b.protos.CalculateSumRequest\x1a\x1c.protos.CalculateSumResponse\"\x00\x12h\n" +
+	"\x18PrimeNumberDecomposition\x12#.protos.PrimeNumberDecompositionReq\x1a#.protos.PrimeNumberDecompositionRes\"\x000\x01\x12J\n" +
+	"\x0eComputeAverage\x12\x19.protos.ComputeAverageReq\x1a\x19.protos.ComputeAverageRes\"\x00(\x01B\fZ\n" +
 	"protos/apib\x06proto3"
 
 var (
@@ -143,16 +329,24 @@ func file_calculator_proto_rawDescGZIP() []byte {
 	return file_calculator_proto_rawDescData
 }
 
-var file_calculator_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_calculator_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_calculator_proto_goTypes = []any{
-	(*CalculateSumRequest)(nil),  // 0: protos.CalculateSumRequest
-	(*CalculateSumResponse)(nil), // 1: protos.CalculateSumResponse
+	(*CalculateSumRequest)(nil),         // 0: protos.CalculateSumRequest
+	(*CalculateSumResponse)(nil),        // 1: protos.CalculateSumResponse
+	(*PrimeNumberDecompositionReq)(nil), // 2: protos.PrimeNumberDecompositionReq
+	(*PrimeNumberDecompositionRes)(nil), // 3: protos.PrimeNumberDecompositionRes
+	(*ComputeAverageReq)(nil),           // 4: protos.ComputeAverageReq
+	(*ComputeAverageRes)(nil),           // 5: protos.ComputeAverageRes
 }
 var file_calculator_proto_depIdxs = []int32{
 	0, // 0: protos.CalculatorService.Sum:input_type -> protos.CalculateSumRequest
-	1, // 1: protos.CalculatorService.Sum:output_type -> protos.CalculateSumResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: protos.CalculatorService.PrimeNumberDecomposition:input_type -> protos.PrimeNumberDecompositionReq
+	4, // 2: protos.CalculatorService.ComputeAverage:input_type -> protos.ComputeAverageReq
+	1, // 3: protos.CalculatorService.Sum:output_type -> protos.CalculateSumResponse
+	3, // 4: protos.CalculatorService.PrimeNumberDecomposition:output_type -> protos.PrimeNumberDecompositionRes
+	5, // 5: protos.CalculatorService.ComputeAverage:output_type -> protos.ComputeAverageRes
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -169,7 +363,7 @@ func file_calculator_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_calculator_proto_rawDesc), len(file_calculator_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
