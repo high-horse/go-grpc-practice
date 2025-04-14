@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net"
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	pb "protos/calculator/api"
 )
@@ -105,6 +108,18 @@ func (*GServer) FindMaximum(stream grpc.BidiStreamingServer[pb.FindMaximumReq, p
 	
 	return nil
 }
+
+func (*GServer) SquareRoot(ctx context.Context, req *pb.SquareRootReq) (*pb.SquareRootRes, error) {
+	n := req.GetNumber()
+	if n < 0 {
+		log.Println("recieved negative number to calculate square root.")
+		return nil, status.Errorf(codes.InvalidArgument, "recieved negative number for square root")
+	}
+	res := &pb.SquareRootRes{SqrootNumber: math.Sqrt(float64(n))}
+	
+	return res, nil
+}
+
 func findLargest(nums []int32) int32 {
 	if len(nums) == 0 {
 		return 0

@@ -9,7 +9,9 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 
 	pb "protos/calculator/api"
 )
@@ -26,7 +28,8 @@ func main() {
 	// doUnaryCall(c)
 	// doServerStream(c)
 	// doClientStream(c)
-	doBiDiStream(c)
+	// doBiDiStream(c)
+	doUnaryErrorHandling(c)
 }
 
 func doUnaryCall(c pb.CalculatorServiceClient) {
@@ -122,4 +125,37 @@ func doBiDiStream(c pb.CalculatorServiceClient) {
 	<-waitCh
 	fmt.Printf("maximum of %v is %d\n", nums, max)
 	// fmt.Fprintf("maximim of %v is %d", (nums), max)
+}
+
+func doUnaryErrorHandling(c pb.CalculatorServiceClient) {
+	callSqRoot(c, 100)
+	callSqRoot(c, 10)
+	callSqRoot(c, -1)
+	callSqRoot(c, 0)
+	
+}
+
+func callSqRoot(c pb.CalculatorServiceClient, number int32) {
+	res, err := c.SquareRoot(context.Background(), &pb.SquareRootReq{Number: number})
+	if err != nil {
+		errCode := status.Code(err)
+		switch errCode {
+			case codes.InvalidArgument:
+				fmt.Printf("Error: invalid argument -%v\n", err)
+				
+			case codes.Internal:
+				fmt.Printf("Internal server error - %v\n", err)
+				
+			case codes.DeadlineExceeded:
+				fmt.Printf("Error: Request timeout - %v\n", err)
+				
+			case codes.NotFound:
+				fmt.Printf("Error: Not Found - %v\n", err)
+				
+			default:
+				fmt.Printf("Unknown error: %v\n", err)
+		}
+		return
+	}
+	fmt.Printf("The square root of %v is %v \n", number, res.GetSqrootNumber())
 }
