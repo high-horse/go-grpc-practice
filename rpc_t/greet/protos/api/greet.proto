@@ -20,6 +20,9 @@ service GreetService {
   
   // client stream 
   rpc LongGreetClientStream(stream LongGreetRequest) returns (LongGreetResponse) {} ;
+  
+  // bi-directional stream 
+  rpc GreetEveryone(stream GreetEveryoneReq) returns (stream GreetEveryoneRes) {} ;
 }
 
 message MessageRequest {
@@ -43,5 +46,13 @@ message LongGreetRequest {
 }
 
 message LongGreetResponse {
+    string result = 1;
+}
+
+message GreetEveryoneReq {
+    GreetingName greeting = 1;
+}
+
+message GreetEveryoneRes {
     string result = 1;
 }

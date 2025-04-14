@@ -293,6 +293,94 @@ func (x *ComputeAverageRes) GetAverage() float64 {
 	return 0
 }
 
+type FindMaximumReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Number        int32                  `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindMaximumReq) Reset() {
+	*x = FindMaximumReq{}
+	mi := &file_calculator_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindMaximumReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindMaximumReq) ProtoMessage() {}
+
+func (x *FindMaximumReq) ProtoReflect() protoreflect.Message {
+	mi := &file_calculator_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindMaximumReq.ProtoReflect.Descriptor instead.
+func (*FindMaximumReq) Descriptor() ([]byte, []int) {
+	return file_calculator_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *FindMaximumReq) GetNumber() int32 {
+	if x != nil {
+		return x.Number
+	}
+	return 0
+}
+
+type FindMaximumRes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Maximum       int32                  `protobuf:"varint,1,opt,name=maximum,proto3" json:"maximum,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindMaximumRes) Reset() {
+	*x = FindMaximumRes{}
+	mi := &file_calculator_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindMaximumRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindMaximumRes) ProtoMessage() {}
+
+func (x *FindMaximumRes) ProtoReflect() protoreflect.Message {
+	mi := &file_calculator_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindMaximumRes.ProtoReflect.Descriptor instead.
+func (*FindMaximumRes) Descriptor() ([]byte, []int) {
+	return file_calculator_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *FindMaximumRes) GetMaximum() int32 {
+	if x != nil {
+		return x.Maximum
+	}
+	return 0
+}
+
 var File_calculator_proto protoreflect.FileDescriptor
 
 const file_calculator_proto_rawDesc = "" +
@@ -310,11 +398,16 @@ const file_calculator_proto_rawDesc = "" +
 	"\x11ComputeAverageReq\x12\x16\n" +
 	"\x06number\x18\x01 \x01(\x03R\x06number\"-\n" +
 	"\x11ComputeAverageRes\x12\x18\n" +
-	"\aaverage\x18\x01 \x01(\x01R\aaverage2\x8d\x02\n" +
+	"\aaverage\x18\x01 \x01(\x01R\aaverage\"(\n" +
+	"\x0eFindMaximumReq\x12\x16\n" +
+	"\x06number\x18\x01 \x01(\x05R\x06number\"*\n" +
+	"\x0eFindMaximumRes\x12\x18\n" +
+	"\amaximum\x18\x01 \x01(\x05R\amaximum2\xd2\x02\n" +
 	"\x11CalculatorService\x12B\n" +
 	"\x03Sum\x12\x1b.protos.CalculateSumRequest\x1a\x1c.protos.CalculateSumResponse\"\x00\x12h\n" +
 	"\x18PrimeNumberDecomposition\x12#.protos.PrimeNumberDecompositionReq\x1a#.protos.PrimeNumberDecompositionRes\"\x000\x01\x12J\n" +
-	"\x0eComputeAverage\x12\x19.protos.ComputeAverageReq\x1a\x19.protos.ComputeAverageRes\"\x00(\x01B\fZ\n" +
+	"\x0eComputeAverage\x12\x19.protos.ComputeAverageReq\x1a\x19.protos.ComputeAverageRes\"\x00(\x01\x12C\n" +
+	"\vFindMaximum\x12\x16.protos.FindMaximumReq\x1a\x16.protos.FindMaximumRes\"\x00(\x010\x01B\fZ\n" +
 	"protos/apib\x06proto3"
 
 var (
@@ -329,7 +422,7 @@ func file_calculator_proto_rawDescGZIP() []byte {
 	return file_calculator_proto_rawDescData
 }
 
-var file_calculator_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_calculator_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_calculator_proto_goTypes = []any{
 	(*CalculateSumRequest)(nil),         // 0: protos.CalculateSumRequest
 	(*CalculateSumResponse)(nil),        // 1: protos.CalculateSumResponse
@@ -337,16 +430,20 @@ var file_calculator_proto_goTypes = []any{
 	(*PrimeNumberDecompositionRes)(nil), // 3: protos.PrimeNumberDecompositionRes
 	(*ComputeAverageReq)(nil),           // 4: protos.ComputeAverageReq
 	(*ComputeAverageRes)(nil),           // 5: protos.ComputeAverageRes
+	(*FindMaximumReq)(nil),              // 6: protos.FindMaximumReq
+	(*FindMaximumRes)(nil),              // 7: protos.FindMaximumRes
 }
 var file_calculator_proto_depIdxs = []int32{
 	0, // 0: protos.CalculatorService.Sum:input_type -> protos.CalculateSumRequest
 	2, // 1: protos.CalculatorService.PrimeNumberDecomposition:input_type -> protos.PrimeNumberDecompositionReq
 	4, // 2: protos.CalculatorService.ComputeAverage:input_type -> protos.ComputeAverageReq
-	1, // 3: protos.CalculatorService.Sum:output_type -> protos.CalculateSumResponse
-	3, // 4: protos.CalculatorService.PrimeNumberDecomposition:output_type -> protos.PrimeNumberDecompositionRes
-	5, // 5: protos.CalculatorService.ComputeAverage:output_type -> protos.ComputeAverageRes
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	6, // 3: protos.CalculatorService.FindMaximum:input_type -> protos.FindMaximumReq
+	1, // 4: protos.CalculatorService.Sum:output_type -> protos.CalculateSumResponse
+	3, // 5: protos.CalculatorService.PrimeNumberDecomposition:output_type -> protos.PrimeNumberDecompositionRes
+	5, // 6: protos.CalculatorService.ComputeAverage:output_type -> protos.ComputeAverageRes
+	7, // 7: protos.CalculatorService.FindMaximum:output_type -> protos.FindMaximumRes
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -363,7 +460,7 @@ func file_calculator_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_calculator_proto_rawDesc), len(file_calculator_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

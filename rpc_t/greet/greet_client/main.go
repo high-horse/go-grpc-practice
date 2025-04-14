@@ -35,7 +35,8 @@ func main() {
 
 	// doUnary(clent)
 	// doServerStream(clent)
-	doClientStreaming(clent)
+	// doClientStreaming(clent)
+	doBiDirectionStreaming(clent)
 }
 
 func doUnary(clent pb.GreetServiceClient){
@@ -116,4 +117,50 @@ func doClientStreaming(c pb.GreetServiceClient) {
 	}
 	fmt.Printf("recieved from server \n%s\n" , res.GetResult())
 	// LongGreetClientStream(context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[LongGreetRequest, LongGreetResponse], error)
+}
+
+func doBiDirectionStreaming(c pb.GreetServiceClient) {
+	stream, err := c.GreetEveryone(context.Background())
+	if err != nil {
+		log.Fatal("error occured while creating stream, ", err)
+	}
+	
+	waitCh := make(chan struct{})
+	requests := []*pb.GreetEveryoneReq{
+		&pb.GreetEveryoneReq{Greeting : &pb.GreetingName{FirstName: "jonh",}},
+		&pb.GreetEveryoneReq{Greeting : &pb.GreetingName{FirstName: "mike",}},
+		&pb.GreetEveryoneReq{Greeting : &pb.GreetingName{FirstName: "jonny",}},
+		&pb.GreetEveryoneReq{Greeting : &pb.GreetingName{FirstName: "sam",}},
+		&pb.GreetEveryoneReq{Greeting : &pb.GreetingName{FirstName: "harry",}},
+		
+	}
+	go func(){
+		for _, req := range requests {
+			log.Println("sending ", req)
+			if err := stream.Send(req); err != nil {
+				log.Println("error recieved when sending stream ", err)
+			}
+			time.Sleep(1 * time.Second)
+		}
+		_ = stream.CloseSend()
+	}()
+	
+	go func(){
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Println("error occured while recieving from stream ", err)
+				break
+			}
+			
+			fmt.Println("revieved from stream ", res.GetResult())
+		}
+		close(waitCh)
+		
+	}()
+	
+	<-waitCh
 }

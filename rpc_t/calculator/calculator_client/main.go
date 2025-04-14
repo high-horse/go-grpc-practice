@@ -25,7 +25,8 @@ func main() {
 	
 	// doUnaryCall(c)
 	// doServerStream(c)
-	doClientStream(c)
+	// doClientStream(c)
+	doBiDiStream(c)
 }
 
 func doUnaryCall(c pb.CalculatorServiceClient) {
@@ -81,4 +82,44 @@ func doClientStream(c pb.CalculatorServiceClient) {
 		log.Println("error encountered while closing stream, " , err)
 	}
 	fmt.Printf("Average of %v is %.2f\n", nums, res.GetAverage())
+}
+
+func doBiDiStream(c pb.CalculatorServiceClient) {
+	stream, err := c.FindMaximum(context.Background())
+	if err != nil {
+		log.Fatal("error occired while creating stream ",err)
+	}
+	
+	nums := []int32{1,5,3,6,2,20}
+	waitCh := make(chan struct{})
+	var max int32
+	go func(){
+		for _, n := range nums {
+			fmt.Println("sending ", n)
+			if err := stream.Send(&pb.FindMaximumReq{Number: n}); err != nil {
+				log.Fatal("error occured while senging stream ", err)
+			}
+			time.Sleep(1*time.Second)
+		}
+		_ = stream.CloseSend()
+	}()
+	
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err ==io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatal("error occured while recieving stream, ", err)
+			}
+			max = res.GetMaximum()
+			fmt.Println("recieved ", res.GetMaximum())
+		}
+		close(waitCh)
+	}()
+	
+	<-waitCh
+	fmt.Printf("maximum of %v is %d\n", nums, max)
+	// fmt.Fprintf("maximim of %v is %d", (nums), max)
 }

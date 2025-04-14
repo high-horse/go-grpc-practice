@@ -337,6 +337,94 @@ func (x *LongGreetResponse) GetResult() string {
 	return ""
 }
 
+type GreetEveryoneReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Greeting      *GreetingName          `protobuf:"bytes,1,opt,name=greeting,proto3" json:"greeting,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GreetEveryoneReq) Reset() {
+	*x = GreetEveryoneReq{}
+	mi := &file_api_greet_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GreetEveryoneReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GreetEveryoneReq) ProtoMessage() {}
+
+func (x *GreetEveryoneReq) ProtoReflect() protoreflect.Message {
+	mi := &file_api_greet_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GreetEveryoneReq.ProtoReflect.Descriptor instead.
+func (*GreetEveryoneReq) Descriptor() ([]byte, []int) {
+	return file_api_greet_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GreetEveryoneReq) GetGreeting() *GreetingName {
+	if x != nil {
+		return x.Greeting
+	}
+	return nil
+}
+
+type GreetEveryoneRes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Result        string                 `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GreetEveryoneRes) Reset() {
+	*x = GreetEveryoneRes{}
+	mi := &file_api_greet_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GreetEveryoneRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GreetEveryoneRes) ProtoMessage() {}
+
+func (x *GreetEveryoneRes) ProtoReflect() protoreflect.Message {
+	mi := &file_api_greet_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GreetEveryoneRes.ProtoReflect.Descriptor instead.
+func (*GreetEveryoneRes) Descriptor() ([]byte, []int) {
+	return file_api_greet_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GreetEveryoneRes) GetResult() string {
+	if x != nil {
+		return x.Result
+	}
+	return ""
+}
+
 var File_api_greet_proto protoreflect.FileDescriptor
 
 const file_api_greet_proto_rawDesc = "" +
@@ -358,11 +446,16 @@ const file_api_greet_proto_rawDesc = "" +
 	"\x10LongGreetRequest\x12-\n" +
 	"\bgreeting\x18\x01 \x01(\v2\x11.api.GreetingNameR\bgreeting\"+\n" +
 	"\x11LongGreetResponse\x12\x16\n" +
-	"\x06result\x18\x01 \x01(\tR\x06result2\xf2\x01\n" +
+	"\x06result\x18\x01 \x01(\tR\x06result\"A\n" +
+	"\x10GreetEveryoneReq\x12-\n" +
+	"\bgreeting\x18\x01 \x01(\v2\x11.api.GreetingNameR\bgreeting\"*\n" +
+	"\x10GreetEveryoneRes\x12\x16\n" +
+	"\x06result\x18\x01 \x01(\tR\x06result2\xb7\x02\n" +
 	"\fGreetService\x128\n" +
 	"\fGreetMessage\x12\x13.api.MessageRequest\x1a\x11.api.MessageReply\"\x00\x12\\\n" +
 	"\x16GreetMessageManyServer\x12\x1e.api.GreetMessageManyServerReq\x1a\x1e.api.GreetMessageManyServerRes\"\x000\x01\x12J\n" +
-	"\x15LongGreetClientStream\x12\x15.api.LongGreetRequest\x1a\x16.api.LongGreetResponse\"\x00(\x01B\fZ\n" +
+	"\x15LongGreetClientStream\x12\x15.api.LongGreetRequest\x1a\x16.api.LongGreetResponse\"\x00(\x01\x12C\n" +
+	"\rGreetEveryone\x12\x15.api.GreetEveryoneReq\x1a\x15.api.GreetEveryoneRes\"\x00(\x010\x01B\fZ\n" +
 	"protos/apib\x06proto3"
 
 var (
@@ -377,7 +470,7 @@ func file_api_greet_proto_rawDescGZIP() []byte {
 	return file_api_greet_proto_rawDescData
 }
 
-var file_api_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_api_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_api_greet_proto_goTypes = []any{
 	(*GreetingName)(nil),              // 0: api.GreetingName
 	(*MessageRequest)(nil),            // 1: api.MessageRequest
@@ -386,22 +479,27 @@ var file_api_greet_proto_goTypes = []any{
 	(*GreetMessageManyServerRes)(nil), // 4: api.GreetMessageManyServerRes
 	(*LongGreetRequest)(nil),          // 5: api.LongGreetRequest
 	(*LongGreetResponse)(nil),         // 6: api.LongGreetResponse
+	(*GreetEveryoneReq)(nil),          // 7: api.GreetEveryoneReq
+	(*GreetEveryoneRes)(nil),          // 8: api.GreetEveryoneRes
 }
 var file_api_greet_proto_depIdxs = []int32{
 	0, // 0: api.MessageRequest.greeting_name:type_name -> api.GreetingName
 	0, // 1: api.GreetMessageManyServerReq.greet_name:type_name -> api.GreetingName
 	0, // 2: api.LongGreetRequest.greeting:type_name -> api.GreetingName
-	1, // 3: api.GreetService.GreetMessage:input_type -> api.MessageRequest
-	3, // 4: api.GreetService.GreetMessageManyServer:input_type -> api.GreetMessageManyServerReq
-	5, // 5: api.GreetService.LongGreetClientStream:input_type -> api.LongGreetRequest
-	2, // 6: api.GreetService.GreetMessage:output_type -> api.MessageReply
-	4, // 7: api.GreetService.GreetMessageManyServer:output_type -> api.GreetMessageManyServerRes
-	6, // 8: api.GreetService.LongGreetClientStream:output_type -> api.LongGreetResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 3: api.GreetEveryoneReq.greeting:type_name -> api.GreetingName
+	1, // 4: api.GreetService.GreetMessage:input_type -> api.MessageRequest
+	3, // 5: api.GreetService.GreetMessageManyServer:input_type -> api.GreetMessageManyServerReq
+	5, // 6: api.GreetService.LongGreetClientStream:input_type -> api.LongGreetRequest
+	7, // 7: api.GreetService.GreetEveryone:input_type -> api.GreetEveryoneReq
+	2, // 8: api.GreetService.GreetMessage:output_type -> api.MessageReply
+	4, // 9: api.GreetService.GreetMessageManyServer:output_type -> api.GreetMessageManyServerRes
+	6, // 10: api.GreetService.LongGreetClientStream:output_type -> api.LongGreetResponse
+	8, // 11: api.GreetService.GreetEveryone:output_type -> api.GreetEveryoneRes
+	8, // [8:12] is the sub-list for method output_type
+	4, // [4:8] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_api_greet_proto_init() }
@@ -415,7 +513,7 @@ func file_api_greet_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_greet_proto_rawDesc), len(file_api_greet_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

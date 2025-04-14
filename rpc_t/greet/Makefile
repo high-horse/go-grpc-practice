@@ -13,4 +13,4 @@ gen_all:
 gen_greet:
 	@echo "Generating proto code..."
 	protoc   --proto_path=./protos   --go_out=.   --go-grpc_out=.   api/greet.proto
-	@echo "Proto code generation completed."
+	@echo "Successfully generated code."

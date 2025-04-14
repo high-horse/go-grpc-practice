@@ -80,3 +80,40 @@ func (*GServer) ComputeAverage(stream grpc.ClientStreamingServer[pb.ComputeAvera
 		count ++
 	}
 }
+
+
+func (*GServer) FindMaximum(stream grpc.BidiStreamingServer[pb.FindMaximumReq, pb.FindMaximumRes]) error {
+	nums := make([]int32, 0)
+	
+	for{
+		req, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Println("error occured from the client stream ", err)
+			return err
+		}
+		
+		nums = append(nums, req.GetNumber())
+		res := &pb.FindMaximumRes{Maximum: findLargest(nums)}
+		if err := stream.Send(res); err != nil {
+			log.Println("error while sending response from server ", err)
+			return err
+		}
+	}
+	
+	return nil
+}
+func findLargest(nums []int32) int32 {
+	if len(nums) == 0 {
+		return 0
+	}
+	max := nums[0]
+	for _, n := range nums{
+		if max < n{
+			max = n
+		}
+	}
+	return max
+}

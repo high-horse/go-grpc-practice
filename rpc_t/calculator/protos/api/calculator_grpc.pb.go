@@ -22,6 +22,7 @@ const (
 	CalculatorService_Sum_FullMethodName                      = "/protos.CalculatorService/Sum"
 	CalculatorService_PrimeNumberDecomposition_FullMethodName = "/protos.CalculatorService/PrimeNumberDecomposition"
 	CalculatorService_ComputeAverage_FullMethodName           = "/protos.CalculatorService/ComputeAverage"
+	CalculatorService_FindMaximum_FullMethodName              = "/protos.CalculatorService/FindMaximum"
 )
 
 // CalculatorServiceClient is the client API for CalculatorService service.
@@ -33,6 +34,8 @@ type CalculatorServiceClient interface {
 	PrimeNumberDecomposition(ctx context.Context, in *PrimeNumberDecompositionReq, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PrimeNumberDecompositionRes], error)
 	// client streaming
 	ComputeAverage(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[ComputeAverageReq, ComputeAverageRes], error)
+	// bi-directional streaming
+	FindMaximum(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FindMaximumReq, FindMaximumRes], error)
 }
 
 type calculatorServiceClient struct {
@@ -85,6 +88,19 @@ func (c *calculatorServiceClient) ComputeAverage(ctx context.Context, opts ...gr
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CalculatorService_ComputeAverageClient = grpc.ClientStreamingClient[ComputeAverageReq, ComputeAverageRes]
 
+func (c *calculatorServiceClient) FindMaximum(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FindMaximumReq, FindMaximumRes], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[2], CalculatorService_FindMaximum_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[FindMaximumReq, FindMaximumRes]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_FindMaximumClient = grpc.BidiStreamingClient[FindMaximumReq, FindMaximumRes]
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility.
@@ -94,6 +110,8 @@ type CalculatorServiceServer interface {
 	PrimeNumberDecomposition(*PrimeNumberDecompositionReq, grpc.ServerStreamingServer[PrimeNumberDecompositionRes]) error
 	// client streaming
 	ComputeAverage(grpc.ClientStreamingServer[ComputeAverageReq, ComputeAverageRes]) error
+	// bi-directional streaming
+	FindMaximum(grpc.BidiStreamingServer[FindMaximumReq, FindMaximumRes]) error
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -112,6 +130,9 @@ func (UnimplementedCalculatorServiceServer) PrimeNumberDecomposition(*PrimeNumbe
 }
 func (UnimplementedCalculatorServiceServer) ComputeAverage(grpc.ClientStreamingServer[ComputeAverageReq, ComputeAverageRes]) error {
 	return status.Errorf(codes.Unimplemented, "method ComputeAverage not implemented")
+}
+func (UnimplementedCalculatorServiceServer) FindMaximum(grpc.BidiStreamingServer[FindMaximumReq, FindMaximumRes]) error {
+	return status.Errorf(codes.Unimplemented, "method FindMaximum not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 func (UnimplementedCalculatorServiceServer) testEmbeddedByValue()                           {}
@@ -170,6 +191,13 @@ func _CalculatorService_ComputeAverage_Handler(srv interface{}, stream grpc.Serv
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CalculatorService_ComputeAverageServer = grpc.ClientStreamingServer[ComputeAverageReq, ComputeAverageRes]
 
+func _CalculatorService_FindMaximum_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).FindMaximum(&grpc.GenericServerStream[FindMaximumReq, FindMaximumRes]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_FindMaximumServer = grpc.BidiStreamingServer[FindMaximumReq, FindMaximumRes]
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -191,6 +219,12 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ComputeAverage",
 			Handler:       _CalculatorService_ComputeAverage_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "FindMaximum",
+			Handler:       _CalculatorService_FindMaximum_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

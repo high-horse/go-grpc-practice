@@ -78,12 +78,32 @@ func (*GreetServer) LongGreetClientStream(stream grpc.ClientStreamingServer[pb.L
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {
-			return stream.SendAndClose(&pb.LongGreetResponse{Result: strings.Join(res, "\n")})
+			break
 		}
 		if err != nil {
 			log.Fatal("error from client stream, ", err)
 		}
 		res = append(res, fmt.Sprintf("hello %s %s", req.GetGreeting().GetFirstName(), req.GetGreeting().GetFirstName()))
+	}
+	return stream.SendAndClose(&pb.LongGreetResponse{Result: strings.Join(res, "\n")})
+}
+
+func (*GreetServer) GreetEveryone(stream grpc.BidiStreamingServer[pb.GreetEveryoneReq, pb.GreetEveryoneRes]) error {
+	fmt.Println("GreetEveryone envoked")
+	
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {	
+			break
+		}
+		if err != nil {
+			return err
+		}
+		
+		res := &pb.GreetEveryoneRes{Result: "helllo "+ req.GetGreeting().GetFirstName() + " !"}
+		if err := stream.Send(res); err != nil {
+			return err
+		}
 	}
 	
 	return nil
