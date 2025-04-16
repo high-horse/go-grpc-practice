@@ -11,6 +11,8 @@ import (
 	pb "protos/calculate"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 
@@ -47,4 +49,28 @@ func (*CalculateServer) CalculateSum(ctx context.Context, req *pb.CalculateSumRe
 	sum := firstNum + secondNum
 	time.Sleep(5 * time.Second)
 	return &pb.CalculateSumResponse{Result: sum}, nil
+}
+
+func (*CalculateServer) PrimeNumberDecomposition(req *pb.PrimeNumberDecompositionReq, stream grpc.ServerStreamingServer[pb.PrimeNumberDecompositionRes]) error {
+	fmt.Println("invoked Prime Number Decomposition with ", req)
+	num := req.GetNumber()
+	if num < 0 {
+		return status.Error(codes.InvalidArgument, fmt.Sprintf("number must be grater than 0; got: %d", num))
+	}
+	k := int32(2)
+	for num > 1 {
+		if err := stream.Context().Err(); err != nil {
+			fmt.Println("client disconnected, stopping function ")
+			return nil
+		}
+		if num % k == 0 {
+			stream.Send(&pb.PrimeNumberDecompositionRes{Result: k})
+			num = num / k
+		} else {
+			k ++
+		}
+		time.Sleep(time.Second * 2)
+		fmt.Println("number reached ", k)
+	}
+	return nil
 }
