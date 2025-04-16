@@ -53,6 +53,7 @@ func (*CalculateServer) CalculateSum(ctx context.Context, req *pb.CalculateSumRe
 
 func (*CalculateServer) PrimeNumberDecomposition(req *pb.PrimeNumberDecompositionReq, stream grpc.ServerStreamingServer[pb.PrimeNumberDecompositionRes]) error {
 	fmt.Println("invoked Prime Number Decomposition with ", req)
+	return status.Error(codes.Unimplemented, "method is not implemented yet")
 	num := req.GetNumber()
 	if num < 0 {
 		return status.Error(codes.InvalidArgument, fmt.Sprintf("number must be grater than 0; got: %d", num))
