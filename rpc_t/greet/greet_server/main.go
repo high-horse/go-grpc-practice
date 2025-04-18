@@ -11,6 +11,11 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
+	// "google.golang.org/grpc/codes"
+	// "google.golang.org/grpc/status"
 
 	pb "protos/api/api"
 )
@@ -105,6 +110,18 @@ func (*GreetServer) GreetEveryone(stream grpc.BidiStreamingServer[pb.GreetEveryo
 			return err
 		}
 	}
-	
 	return nil
+}
+
+func (*GreetServer)	GreetWithDeadline(ctx context.Context, req *pb.MessageRequest) (*pb.MessageReply, error) {
+	fmt.Println("GreetWithDeadline called with ", req.GetGreetingName())
+	// return nil, status.Error(codes.Unimplemented, "method not implemented")
+	
+	res := fmt.Sprintf("hello greetings %s %s", req.GetGreetingName().FirstName, req.GetGreetingName().LastName)
+	time.Sleep(3 * time.Second)
+	if err := ctx.Err(); err != nil {
+		log.Println("client cancelled the request.")
+		return nil, status.Error(codes.Canceled, "client cancelled the request.")
+	}
+	return &pb.MessageReply{Result: res}, nil
 }

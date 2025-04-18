@@ -12,7 +12,9 @@ import (
 	// "time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 
 	pb "protos/api/api"
 )
@@ -36,7 +38,10 @@ func main() {
 	// doUnary(clent)
 	// doServerStream(clent)
 	// doClientStreaming(clent)
-	doBiDirectionStreaming(clent)
+	// doBiDirectionStreaming(clent)
+	doUnaryGreetWithTimeout(clent, time.Second * 5)
+	doUnaryGreetWithTimeout(clent, time.Second * 1)
+
 }
 
 func doUnary(clent pb.GreetServiceClient){
@@ -163,4 +168,31 @@ func doBiDirectionStreaming(c pb.GreetServiceClient) {
 	}()
 	
 	<-waitCh
+}
+
+func doUnaryGreetWithTimeout(c pb.GreetServiceClient, timeout time.Duration) {
+	log.Println("called doUnaryGreetWithTimeout")
+	req := &pb.MessageRequest{
+		GreetingName: &pb.GreetingName{
+			FirstName: "john",
+			LastName: "doe",
+		},
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	res, err := c.GreetWithDeadline(ctx, req)
+	if err != nil {
+		if grpcErr, yes := status.FromError(err); yes {
+			if grpcErr.Code() == codes.DeadlineExceeded {
+				log.Printf("deadline exceeded: %v", grpcErr)
+			} else {
+				log.Printf("error occured: %v", err)
+			}
+		} else {
+			log.Printf("some error occured %v", err)
+		}
+		return
+	}
+	
+	log.Println("greet responded with ", res.GetResult())
 }

@@ -450,12 +450,13 @@ const file_api_greet_proto_rawDesc = "" +
 	"\x10GreetEveryoneReq\x12-\n" +
 	"\bgreeting\x18\x01 \x01(\v2\x11.api.GreetingNameR\bgreeting\"*\n" +
 	"\x10GreetEveryoneRes\x12\x16\n" +
-	"\x06result\x18\x01 \x01(\tR\x06result2\xb7\x02\n" +
+	"\x06result\x18\x01 \x01(\tR\x06result2\xf6\x02\n" +
 	"\fGreetService\x128\n" +
 	"\fGreetMessage\x12\x13.api.MessageRequest\x1a\x11.api.MessageReply\"\x00\x12\\\n" +
 	"\x16GreetMessageManyServer\x12\x1e.api.GreetMessageManyServerReq\x1a\x1e.api.GreetMessageManyServerRes\"\x000\x01\x12J\n" +
 	"\x15LongGreetClientStream\x12\x15.api.LongGreetRequest\x1a\x16.api.LongGreetResponse\"\x00(\x01\x12C\n" +
-	"\rGreetEveryone\x12\x15.api.GreetEveryoneReq\x1a\x15.api.GreetEveryoneRes\"\x00(\x010\x01B\fZ\n" +
+	"\rGreetEveryone\x12\x15.api.GreetEveryoneReq\x1a\x15.api.GreetEveryoneRes\"\x00(\x010\x01\x12=\n" +
+	"\x11GreetWithDeadline\x12\x13.api.MessageRequest\x1a\x11.api.MessageReply\"\x00B\fZ\n" +
 	"protos/apib\x06proto3"
 
 var (
@@ -491,12 +492,14 @@ var file_api_greet_proto_depIdxs = []int32{
 	3, // 5: api.GreetService.GreetMessageManyServer:input_type -> api.GreetMessageManyServerReq
 	5, // 6: api.GreetService.LongGreetClientStream:input_type -> api.LongGreetRequest
 	7, // 7: api.GreetService.GreetEveryone:input_type -> api.GreetEveryoneReq
-	2, // 8: api.GreetService.GreetMessage:output_type -> api.MessageReply
-	4, // 9: api.GreetService.GreetMessageManyServer:output_type -> api.GreetMessageManyServerRes
-	6, // 10: api.GreetService.LongGreetClientStream:output_type -> api.LongGreetResponse
-	8, // 11: api.GreetService.GreetEveryone:output_type -> api.GreetEveryoneRes
-	8, // [8:12] is the sub-list for method output_type
-	4, // [4:8] is the sub-list for method input_type
+	1, // 8: api.GreetService.GreetWithDeadline:input_type -> api.MessageRequest
+	2, // 9: api.GreetService.GreetMessage:output_type -> api.MessageReply
+	4, // 10: api.GreetService.GreetMessageManyServer:output_type -> api.GreetMessageManyServerRes
+	6, // 11: api.GreetService.LongGreetClientStream:output_type -> api.LongGreetResponse
+	8, // 12: api.GreetService.GreetEveryone:output_type -> api.GreetEveryoneRes
+	2, // 13: api.GreetService.GreetWithDeadline:output_type -> api.MessageReply
+	9, // [9:14] is the sub-list for method output_type
+	4, // [4:9] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
 	4, // [4:4] is the sub-list for extension extendee
 	0, // [0:4] is the sub-list for field type_name
