@@ -115,10 +115,68 @@ func handleCalculateAvgRpcCall(c pb.CalculateServiceClient, numArr []int32) {
 func handleMaxNumber(c pb.CalculateServiceClient) {
 	handleDuplexMaxRpcCall(c, []int32{1, 5, 6, 3, 2, 6})
 
-	// handleDuplexMaxRpcCall(c, []int32{1, 5, 6, 3, 2, 6, 7, 9, 1, 2, 5, 8, 3, 4, 9, 8, 10})
+	handleDuplexMaxRpcCall(c, []int32{1, 5, 6, 3, 2, 6, 7, 9, 1, 2, 5, 8, 3, 4, 9, 8, 10})
 }
 
 func handleDuplexMaxRpcCall(c pb.CalculateServiceClient, nums []int32) error {
+	ctx := context.Background()
+	stream, err := c.FindMaximum(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to create stream: %w", err)
+	}
+	
+	// create a cgannel for communication betn goroutines
+	doneCh := make(chan struct{})
+	var finalMax int32
+	var recievErr error
+	
+	// start the reciever goroutine first
+	go func(){
+		defer close(doneCh)
+		var currentMax int32
+		for{
+			resp, err := stream.Recv()
+			if err == io.EOF{
+				break
+			}
+			if err != nil {
+				recievErr = err
+				break
+			}
+			currentMax = resp.GetResult()
+			log.Println("recieved ", currentMax)
+		}
+		finalMax = currentMax
+	}()
+	
+	// send all numbers in main goroutine
+	for _, num := range nums {
+		log.Println("sending ", num)
+		if err := stream.Send(&pb.FindMaximumReq{Number: num}); err != nil {
+			return fmt.Errorf("error sending number: %w", err)
+		}
+		time.Sleep(time.Millisecond * 1000)
+	}
+	
+	// close the sending side
+	if err := stream.CloseSend(); err != nil {
+		return fmt.Errorf("error closing send stream: %w", err)
+	}
+	
+	// wait for reciever to finish
+	<-doneCh
+	
+	// check if there was error in recieving
+	if recievErr != nil {
+		return fmt.Errorf("error recieving: %w", err)
+	}
+	
+	log.Printf("final maximum of %v is %d\n", nums, finalMax)
+	return nil
+	
+}
+
+func handleDuplexMaxRpcCallComplicated(c pb.CalculateServiceClient, nums []int32) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	
