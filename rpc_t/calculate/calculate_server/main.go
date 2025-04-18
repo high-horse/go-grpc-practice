@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"time"
@@ -53,7 +54,7 @@ func (*CalculateServer) CalculateSum(ctx context.Context, req *pb.CalculateSumRe
 
 func (*CalculateServer) PrimeNumberDecomposition(req *pb.PrimeNumberDecompositionReq, stream grpc.ServerStreamingServer[pb.PrimeNumberDecompositionRes]) error {
 	fmt.Println("invoked Prime Number Decomposition with ", req)
-	return status.Error(codes.Unimplemented, "method is not implemented yet")
+	// return status.Error(codes.Unimplemented, "method is not implemented yet")
 	num := req.GetNumber()
 	if num < 0 {
 		return status.Error(codes.InvalidArgument, fmt.Sprintf("number must be grater than 0; got: %d", num))
@@ -72,6 +73,54 @@ func (*CalculateServer) PrimeNumberDecomposition(req *pb.PrimeNumberDecompositio
 		}
 		time.Sleep(time.Second * 2)
 		fmt.Println("number reached ", k)
+	}
+	return nil
+}
+
+func (*CalculateServer)	ComputeAverage(stream grpc.ClientStreamingServer[pb.ComputeAverageReq, pb.ComputeAverageRes]) error{
+	fmt.Println("envoked ComputeAverage ")
+	sum := int32(0)
+	count := int32(0)
+	for {
+		req, err := stream.Recv()
+		if err ==io.EOF {
+			break
+		} else if err != nil {
+			return status.Error(codes.Unknown, fmt.Sprintf("unknown error occured, %v", err))
+		}
+		fmt.Println("recieved ", req.GetNumber())
+		sum += req.GetNumber()
+		count ++
+	}
+	avg := float64(sum)/float64(count)
+	
+	if err := stream.SendAndClose(&pb.ComputeAverageRes{Average: avg}); err != nil {
+		log.Println("error occured ", err)
+	}
+	
+	
+	return nil
+}
+
+func (*CalculateServer) FindMaximum(stream grpc.BidiStreamingServer[pb.FindMaximumReq, pb.FindMaximumRes]) error {
+	fmt.Println("FindMaximum envoked")
+	initial := int32(0)
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}else if err != nil {
+			return status.Error(codes.Unknown, err.Error())
+		}
+		
+		fmt.Println("recieved ", req.GetNumber())
+		if req.GetNumber() < 0 {
+			return status.Error(codes.InvalidArgument, fmt.Sprintf("expected positive integer, found %v", req.GetNumber()))
+		}
+		if initial < req.GetNumber() {
+			initial = req.GetNumber()
+			stream.Send(&pb.FindMaximumRes{Result: initial})
+		}
 	}
 	return nil
 }
